@@ -17,7 +17,7 @@
             <ImageView
                 android:id="@+id/welcomeImage"
                 android:layout_width="match_parent"
-                android:layout_height="445dp"
+                android:layout_height="450dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/welcome" />
 
@@ -45,8 +45,8 @@
                 android:background="#ECEFF1"
                 android:hint="Email address"
                 android:inputType="textEmailAddress"
-                android:padding="16dp"
-                android:textSize="14sp" />
+                android:padding="12dp"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/passwordEditText"
@@ -60,8 +60,8 @@
                 android:background="#ECEFF1"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:padding="16dp"
-                android:textSize="14sp" />
+                android:padding="12dp"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/loginButton"

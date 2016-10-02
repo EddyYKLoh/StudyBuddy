@@ -2,20 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_sign_up"
+    android:id="@+id/activity_preference"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ykloh.studybuddy.SignUpActivity">
+    tools:context="com.ykloh.studybuddy.PreferenceActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/signUpToolbar"
+        android:id="@+id/preferenceToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Sign Up"
+        app:title="Preference"
         app:titleTextColor="#FFFFFF" />
 
     <ScrollView
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/signUpToolbar"
+        android:layout_below="@id/preferenceToolbar"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -36,71 +36,22 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/nameTextView"
+                android:id="@+id/preferenceTitleTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/nameEditText"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:inputType="textPersonName" />
+                android:text="Let us know your preference for tutor."
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/emailAddRegTextView"
+                android:id="@+id/preferredMeetingTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email Address:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/newEmailAddressEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:inputType="textEmailAddress" />
-
-            <TextView
-                android:id="@+id/newPasswordTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Password:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
-            <EditText
-                android:id="@+id/newPasswordEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:inputType="textPassword" />
-
-            <TextView
-                android:id="@+id/confirmPasswordTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confirm Password:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/confirmPasswordEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:inputType="textPassword" />
-
-            <TextView
-                android:id="@+id/genderTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gender:"
+                android:text="Prefer meeting:"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <RadioGroup
-                android:id="@+id/genderRadioGroup"
+                android:id="@+id/preferredMmeetingRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -108,25 +59,25 @@
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/maleRadioButton"
+                    android:id="@+id/virtuallyRadioButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="false"
-                    android:text="Male" />
+                    android:text="virtually" />
 
                 <RadioButton
-                    android:id="@+id/femaleRadioButton"
+                    android:id="@+id/faceToFaceRadioButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="false"
-                    android:text="Female" />
+                    android:text="face-to-face" />
 
             </RadioGroup>
 
             <TextView
-                android:id="@+id/levelOfStudyTextView"
+                android:id="@+id/preferedLevelOfStudyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Level of study:"
@@ -141,21 +92,21 @@
                 android:orientation="vertical">
 
                 <RadioButton
-                    android:id="@+id/undergraduateRadioButton"
+                    android:id="@+id/preferUndergraduateRadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:text="Undergraduate" />
 
                 <RadioButton
-                    android:id="@+id/postgraduateRadioButton"
+                    android:id="@+id/preferPostgraduateRadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:text="Postgraduate" />
 
                 <RadioButton
-                    android:id="@+id/researcherRadioButton"
+                    android:id="@+id/preferResearcherRadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
@@ -163,19 +114,11 @@
 
             </RadioGroup>
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="By clicking sign up, you agree to our terms and conditions."
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
             <Button
-                android:id="@+id/signUpButton"
+                android:id="@+id/savePreferenceButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Sign Up"
+                android:text="Save"
                 android:textColor="#000000" />
 
         </LinearLayout>

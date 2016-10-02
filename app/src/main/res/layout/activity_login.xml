@@ -19,7 +19,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/welcome" />
+                android:elevation="4dp"
+                android:background="@drawable/welcome" />
 
             <TextView
                 android:id="@+id/loginTitle"
@@ -73,7 +74,7 @@
                 android:layout_marginBottom="40dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="40dp"
-                android:background="#4A148C"
+                android:background="@color/colorPrimaryDark"
                 android:text="Login"
                 android:textColor="#FFFFFF" />
 
@@ -83,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/passwordEditText"
                 android:layout_marginTop="16dp"
-                android:background="#4A148C"
+                android:background="@color/colorPrimaryDark"
                 android:padding="16dp"
                 android:text="Create account"
                 android:textColor="#ffffff" />

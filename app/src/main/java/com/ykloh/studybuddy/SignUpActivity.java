@@ -1,6 +1,8 @@
 package com.ykloh.studybuddy;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -81,6 +83,11 @@ public class SignUpActivity extends AppCompatActivity {
                         password = newPassword;
                         SignUpService signUpService = new SignUpService();
                         signUpService.SignUp(SignUpActivity.this, name, emailAddress, password, gender, levelOfStudy);
+                        SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("loggedIn",true);
+                        editor.putString("emailAddress",emailAddress);
+                        editor.commit();
 
                     } else {
                         AlertDialog.Builder WrongPasswordBuilder = new AlertDialog.Builder(SignUpActivity.this);

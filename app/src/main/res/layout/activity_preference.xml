@@ -80,7 +80,7 @@
                 android:id="@+id/preferedLevelOfStudyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Level of study:"
+                android:text="Prefer tutors from which level of study?"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <RadioGroup

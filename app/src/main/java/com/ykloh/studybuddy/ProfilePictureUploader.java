@@ -4,7 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,16 +26,15 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by LYK on 10/2/2016.
+ * Created by LYK on 10/3/2016.
  */
 
-public class SignUpService {
-
+public class ProfilePictureUploader {
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/signUp.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/uploadPicture.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -73,16 +77,16 @@ public class SignUpService {
         return dataString.toString();
     }
 
-    public void SignUp(final Context context, String name, String emailAddress, String password, String gender, String levelOfStudy) {
+    public void UploadPicture(final Context context, String emailAddress, String image) {
 
-        class RegisterUser extends AsyncTask<String, Void, String> {
+        class PictureUploader extends AsyncTask<String, Void, String> {
 
             ProgressDialog loading;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(context, "Signing up", null, true, true);
+                loading = ProgressDialog.show(context, "Uploading", null, true, true);
             }
 
             @Override
@@ -90,18 +94,15 @@ public class SignUpService {
                 super.onPostExecute(s);
                 loading.dismiss();
                 Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                if (s.equals("Successfully registered."))
-                    context.startActivity(new Intent(context, PreferenceActivity.class));
+                if (s.equals("Successfully uploaded."))
+                    context.startActivity(new Intent(context, LoginActivity.class));
             }
 
             @Override
             protected String doInBackground(String... params) {
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("name", params[0]);
-                data.put("emailAddress", params[1]);
-                data.put("password", params[2]);
-                data.put("gender", params[3]);
-                data.put("levelOfStudy", params[4]);
+                data.put("emailAddress", params[0]);
+                data.put("image", params[1]);
 
                 String result = sendPostRequest(data);
 
@@ -110,8 +111,8 @@ public class SignUpService {
 
         }
 
-        RegisterUser ru = new RegisterUser();
-        ru.execute(name, emailAddress, password, gender, levelOfStudy);
+        PictureUploader pu = new PictureUploader();
+        pu.execute(emailAddress, image);
 
     }
 }

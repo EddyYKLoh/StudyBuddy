@@ -24,13 +24,12 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by LYK on 10/2/2016.
  */
 
-public class SignUpService {
-
+public class PreferenceUpdater {
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/signUp.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/updatePreference.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -38,7 +37,7 @@ public class SignUpService {
 
             OutputStream outputStream = connection.getOutputStream();
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            bufferedWriter.write(this.getPostDataString(postDataParams));
+            bufferedWriter.write(getPostDataString(postDataParams));
             bufferedWriter.flush();
             bufferedWriter.close();
             outputStream.close();
@@ -73,16 +72,16 @@ public class SignUpService {
         return dataString.toString();
     }
 
-    public void SignUp(final Context context, String name, String emailAddress, String password, String gender, String levelOfStudy) {
+    public void UpdatePreference(final Context context, String emailAddress, String meetingType, String preferredLvlOfStudy) {
 
-        class RegisterUser extends AsyncTask<String, Void, String> {
+        class preferenceUpdater extends AsyncTask<String, Void, String> {
 
             ProgressDialog loading;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(context, "Signing up", null, true, true);
+                loading = ProgressDialog.show(context, "Saving", null, true, true);
             }
 
             @Override
@@ -90,18 +89,16 @@ public class SignUpService {
                 super.onPostExecute(s);
                 loading.dismiss();
                 Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                if (s.equals("Successfully registered."))
-                    context.startActivity(new Intent(context, PreferenceActivity.class));
+                if (s.equals("Saved."))
+                    context.startActivity(new Intent(context, UpdateProfileActivity.class));
             }
 
             @Override
             protected String doInBackground(String... params) {
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("name", params[0]);
-                data.put("emailAddress", params[1]);
-                data.put("password", params[2]);
-                data.put("gender", params[3]);
-                data.put("levelOfStudy", params[4]);
+                data.put("emailAddress", params[0]);
+                data.put("meetingType", params[1]);
+                data.put("preferredLvlOfStudy", params[2]);
 
                 String result = sendPostRequest(data);
 
@@ -110,8 +107,8 @@ public class SignUpService {
 
         }
 
-        RegisterUser ru = new RegisterUser();
-        ru.execute(name, emailAddress, password, gender, levelOfStudy);
+        preferenceUpdater pu = new preferenceUpdater();
+        pu.execute(emailAddress, meetingType, preferredLvlOfStudy);
 
     }
 }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class LoginActivity extends AppCompatActivity {
+    private Button createAccountButton;
+    private Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +30,23 @@ public class LoginActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.TRANSPARENT);
         }
 
-        final Button createAccountButton = (Button) findViewById(R.id.createAccountButton);
-
+        createAccountButton = (Button) findViewById(R.id.createAccountButton);
+        loginButton = (Button) findViewById(R.id.loginButton); 
+        
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+        });
+
 
     }
 }

@@ -83,11 +83,6 @@ public class SignUpActivity extends AppCompatActivity {
                         password = newPassword;
                         SignUpService signUpService = new SignUpService();
                         signUpService.SignUp(SignUpActivity.this, name, emailAddress, password, gender, levelOfStudy);
-                        SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("loggedIn",true);
-                        editor.putString("emailAddress",emailAddress);
-                        editor.commit();
 
                     } else {
                         AlertDialog.Builder WrongPasswordBuilder = new AlertDialog.Builder(SignUpActivity.this);

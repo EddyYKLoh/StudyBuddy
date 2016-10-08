@@ -3,6 +3,7 @@ package com.ykloh.studybuddy;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -73,7 +74,7 @@ public class SignUpService {
         return dataString.toString();
     }
 
-    public void SignUp(final Context context, String name, String emailAddress, String password, String gender, String levelOfStudy) {
+    public void SignUp(final Context context, String name, final String emailAddress, String password, String gender, String levelOfStudy) {
 
         class RegisterUser extends AsyncTask<String, Void, String> {
 
@@ -92,6 +93,11 @@ public class SignUpService {
                 Toast.makeText(context, s, Toast.LENGTH_LONG).show();
                 if (s.equals("Successfully registered."))
                     context.startActivity(new Intent(context, PreferenceActivity.class));
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("loggedIn",true);
+                    editor.putString("emailAddress",emailAddress);
+                    editor.commit();
             }
 
             @Override

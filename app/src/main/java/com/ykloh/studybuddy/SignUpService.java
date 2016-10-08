@@ -47,7 +47,23 @@ public class SignUpService {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                response = bufferedReader.readLine();
+                String line = null;
+                StringBuffer buffer = new StringBuffer();
+                boolean emailExisted = false;
+                boolean sqlError = false;
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (line.equals("E-mail already exist."))
+                        emailExisted = true;
+                    if (line.equals("Please try again."))
+                        sqlError = true;
+                    buffer.append(line + '\n');
+                }
+                if (sqlError)
+                    response = "Please try again.";
+                else if (emailExisted)
+                    response = "E-mail already exist.";
+                else
+                    response = buffer.toString();
             }
 
         } catch (Exception e) {
@@ -74,7 +90,7 @@ public class SignUpService {
         return dataString.toString();
     }
 
-    public void SignUp(final Context context, String name, final String emailAddress, String password, String gender, String levelOfStudy) {
+    public void SignUp(final Context context, final String name, final String emailAddress, String password, final String gender, final String levelOfStudy) {
 
         class RegisterUser extends AsyncTask<String, Void, String> {
 
@@ -83,7 +99,7 @@ public class SignUpService {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(context, "Signing up", null, true, true);
+                loading = ProgressDialog.show(context, "Signing up...", null, true, true);
             }
 
             @Override
@@ -91,13 +107,27 @@ public class SignUpService {
                 super.onPostExecute(s);
                 loading.dismiss();
                 Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                if (s.equals("Successfully registered."))
-                    context.startActivity(new Intent(context, PreferenceActivity.class));
+
+                if (s.equals("E-mail already exist.")||s.equals("Please try again.")) {
+                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    String[] returnMessage = s.split(System.getProperty("line.separator"));
+                    Toast.makeText(context, returnMessage[0], Toast.LENGTH_LONG).show();
                     SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("loggedIn",true);
-                    editor.putString("emailAddress",emailAddress);
+                    editor.putBoolean("loggedIn", true);
+                    editor.putString("name", name);
+                    editor.putString("emailAddress", emailAddress);
+                    editor.putString("gender", gender);
+                    editor.putString("lvlOfStudy", levelOfStudy);
+                    editor.putString("userID",returnMessage[1]);
                     editor.commit();
+                    context.startActivity(new Intent(context, PreferenceActivity.class));
+
+                }
+
             }
 
             @Override

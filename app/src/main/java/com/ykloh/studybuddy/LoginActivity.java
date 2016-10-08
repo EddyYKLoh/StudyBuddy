@@ -11,11 +11,14 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class LoginActivity extends AppCompatActivity {
     private Button createAccountButton;
     private Button loginButton;
+    private EditText emailAddressEditText;
+    private EditText passwordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,27 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                emailAddressEditText = (EditText) findViewById(R.id.emailAddEditText);
+                passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+                String emailAddress = emailAddressEditText.getText().toString().trim().toLowerCase();
+                String password = passwordEditText.getText().toString().trim();
+
+                if (emailAddress.equals("")||emailAddress.equals(null)||password.equals("")||password.equals(null)) {
+
+                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(LoginActivity.this);
+                    EmptyBuilder.setMessage("Please fill in your email and password.")
+                            .setNegativeButton("OK", null)
+                            .create()
+                            .show();
+
+                } else {
+
+
+                    LoginService login = new LoginService();
+                    login.Login(LoginActivity.this, emailAddress, password);
+
+                }
             }
         });
 

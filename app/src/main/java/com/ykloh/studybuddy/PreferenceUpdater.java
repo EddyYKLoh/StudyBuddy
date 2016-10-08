@@ -3,6 +3,7 @@ package com.ykloh.studybuddy;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -72,7 +73,7 @@ public class PreferenceUpdater {
         return dataString.toString();
     }
 
-    public void UpdatePreference(final Context context, String emailAddress, String meetingType, String preferredLvlOfStudy) {
+    public void UpdatePreference(final Context context, String emailAddress, final String meetingType, final String preferredLvlOfStudy) {
 
         class preferenceUpdater extends AsyncTask<String, Void, String> {
 
@@ -81,7 +82,7 @@ public class PreferenceUpdater {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(context, "Saving", null, true, true);
+                loading = ProgressDialog.show(context, "Saving...", null, true, true);
             }
 
             @Override
@@ -89,8 +90,15 @@ public class PreferenceUpdater {
                 super.onPostExecute(s);
                 loading.dismiss();
                 Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                if (s.equals("Saved."))
+                if (s.equals("Saved.")) {
                     context.startActivity(new Intent(context, UpdateProfileActivity.class));
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("loggedIn", true);
+                    editor.putString("meetType", meetingType);
+                    editor.putString("preferredLvlOfStudy", preferredLvlOfStudy);
+                    editor.commit();
+                }
             }
 
             @Override

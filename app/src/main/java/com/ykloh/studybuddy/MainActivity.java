@@ -1,8 +1,12 @@
 package com.ykloh.studybuddy;
 
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -23,12 +30,11 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 
@@ -40,6 +46,24 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        View hView = navigationView.getHeaderView(0);
+
+        ImageView profilePicture = (ImageView) hView.findViewById(R.id.profilePictureNavImageView);
+        SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        final String profPicPath = sharedPreferences.getString("profPicPath", null);
+        ImageLoader profilePictureLoader = new ImageLoader();
+        profilePictureLoader.getImageView(profilePicture);
+        profilePictureLoader.execute(profPicPath);
+
+        TextView nameOnNavigationTextView = (TextView) hView.findViewById(R.id.nameOnNavigationTextView);
+        final String username = sharedPreferences.getString("name", null);
+        nameOnNavigationTextView.setText(username);
+
+        TextView emailOnNavigationTextView = (TextView) hView.findViewById(R.id.emailOnNavigationTextView);
+        final String email = sharedPreferences.getString("emailAddress", null);
+        emailOnNavigationTextView.setText(email);
     }
 
     @Override
@@ -67,7 +91,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.putBoolean("loggedIn",false);
+            editor.commit();
             return true;
         }
 
@@ -100,4 +130,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

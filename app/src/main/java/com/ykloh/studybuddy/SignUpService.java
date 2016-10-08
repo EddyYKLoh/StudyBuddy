@@ -31,7 +31,7 @@ public class SignUpService {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/signUp.php");
+            url = new URL("http://192.168.43.90/StudyBuddy/signUp.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -106,7 +106,6 @@ public class SignUpService {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                Toast.makeText(context, s, Toast.LENGTH_LONG).show();
 
                 if (s.equals("E-mail already exist.")||s.equals("Please try again.")) {
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();

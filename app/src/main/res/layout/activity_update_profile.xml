@@ -42,20 +42,13 @@
                 android:text="Profile picture:"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/profilePicturePreviewImageView"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:background="@mipmap/ic_launcher"/>
-
-            <Button
-                android:id="@+id/chooseImageButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:background="@android:drawable/ic_menu_gallery" />
 
             <Button
                 android:id="@+id/uploadProfilePictureButton"

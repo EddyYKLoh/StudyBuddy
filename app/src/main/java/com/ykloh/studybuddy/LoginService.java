@@ -30,7 +30,7 @@ public class LoginService {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/updatePreference.php");
+            url = new URL("http://192.168.43.90/StudyBuddy/login.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -63,19 +63,17 @@ public class LoginService {
             }
 
 
+        } catch (
+                Exception e
+                )
+
+        {
+            e.printStackTrace();
+            response = "Couldn't connect to server.";
+        }
+
+        return response;
     }
-
-    catch(
-    Exception e
-    )
-
-    {
-        e.printStackTrace();
-        response = "Couldn't connect to server.";
-    }
-
-    return response;
-}
 
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder dataString = new StringBuilder();
@@ -98,35 +96,27 @@ public class LoginService {
 
         class login extends AsyncTask<String, Void, String> {
 
-            ProgressDialog loading;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                loading = ProgressDialog.show(context, "Loging in...", null, true, true);
-            }
-
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                loading.dismiss();
                 if (s.equals("Invalid email or password.")) {
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
 
                 } else {
 
                     String[] userData = s.split(System.getProperty("line.separator"));
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser",Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("loggedIn",true);
-                    editor.putString("userID",userData[0]);
-                    editor.putString("name",userData[1]);
-                    editor.putString("emailAddress",userData[2]);
-                    editor.putString("gender",userData[3]);
-                    editor.putString("lvlOfStudy",userData[4]);
-                    editor.putString("meetingType",userData[5]);
-                    editor.putString("prefLvlOfStudy", userData[6]);
-                    editor.putString("profPicPath", userData[7]);
+                    editor.putBoolean("loggedIn", true);
+                    editor.putString("userID", userData[0]);
+                    editor.putString("name", userData[1]);
+                    editor.putString("emailAddress", userData[2]);
+                    editor.putString("password", userData[3]);
+                    editor.putString("gender", userData[4]);
+                    editor.putString("lvlOfStudy", userData[5]);
+                    editor.putString("meetingType", userData[6]);
+                    editor.putString("prefLvlOfStudy", userData[7]);
+                    editor.putString("profPicPath", userData[8]);
 
                     editor.commit();
                     context.startActivity(new Intent(context, MainActivity.class));

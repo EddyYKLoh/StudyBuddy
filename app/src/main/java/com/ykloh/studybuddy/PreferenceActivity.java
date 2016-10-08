@@ -50,7 +50,7 @@ public class PreferenceActivity extends AppCompatActivity {
                 else if (preferResearcherRadioButton.isChecked())
                     preferredLevelOfStudies = "R";
 
-                if (meetingType.equals("Not Selected") || preferredLevelOfStudies.equals("Not Selected")) {
+                if (meetingType.equals("Not selected") || preferredLevelOfStudies.equals("Not selected")) {
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(PreferenceActivity.this);
                     EmptyBuilder.setMessage("Please complete the form.")
                             .setNegativeButton("OK", null)

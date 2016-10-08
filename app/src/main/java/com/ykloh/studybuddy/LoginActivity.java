@@ -1,6 +1,8 @@
 package com.ykloh.studybuddy;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AlertDialog;
@@ -33,6 +35,12 @@ public class LoginActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.TRANSPARENT);
         }
 
+        SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        boolean loggedin = sharedPreferences.getBoolean("loggedIn",false);
+        if(loggedin){
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
+
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
         loginButton = (Button) findViewById(R.id.loginButton); 
         
@@ -61,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                             .show();
 
                 } else {
-
 
                     LoginService login = new LoginService();
                     login.Login(LoginActivity.this, emailAddress, password);

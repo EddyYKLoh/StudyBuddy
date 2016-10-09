@@ -27,7 +27,12 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".PostPublicActivity"
+            android:label="@string/title_activity_post_public"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".SelectSubjectTagsActivity"></activity>
     </application>
 
 </manifest>

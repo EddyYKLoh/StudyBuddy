@@ -110,7 +110,7 @@ public class ProfilePictureUploader {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                if (s.equals("Request failed.") || s.equals("Upload failed.")) {
+                if (s.equals("Request failed.") || s.equals("Upload failed.") || s.equals("Couldn't connect to server.")) {
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
 
                 } else {

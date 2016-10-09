@@ -99,7 +99,7 @@ public class LoginService {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                if (s.equals("Invalid email or password.")) {
+                if (s.equals("Invalid email or password.") || s.equals("Couldn't connect to server.")) {
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
 
                 } else {

@@ -107,7 +107,7 @@ public class SignUpService {
                 super.onPostExecute(s);
                 loading.dismiss();
 
-                if (s.equals("E-mail already exist.")||s.equals("Please try again.")) {
+                if (s.equals("E-mail already exist.")||s.equals("Please try again.") ||s.equals("Couldn't connect to server.")) {
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
 
                 } else {

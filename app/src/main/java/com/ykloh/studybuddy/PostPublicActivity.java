@@ -1,12 +1,11 @@
 package com.ykloh.studybuddy;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,64 +15,67 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-public class MainActivity extends AppCompatActivity
+public class PostPublicActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_post_public);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    startActivity(new Intent(MainActivity.this, PostPublicActivity.class));
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutPubPR);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_viewPubPR);
         navigationView.setNavigationItemSelectedListener(this);
 
         SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         boolean loggedIn = sharedPreferences.getBoolean("loggedIn", false);
 
         if (!loggedIn) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(new Intent(PostPublicActivity.this, LoginActivity.class));
         }
 
         View hView = navigationView.getHeaderView(0);
 
-        ImageView profilePicture = (ImageView) hView.findViewById(R.id.profilePictureNavImageView);
+        ImageView profilePicture = (ImageView) hView.findViewById(R.id.profilePictureNavImageViewPubPR);
         final String profPicPath = sharedPreferences.getString("profPicPath", null);
         ImageLoader profilePictureLoader = new ImageLoader();
         profilePictureLoader.getImageView(profilePicture);
         profilePictureLoader.execute(profPicPath);
 
-        TextView nameOnNavigationTextView = (TextView) hView.findViewById(R.id.nameOnNavigationTextView);
+        TextView nameOnNavigationTextView = (TextView) hView.findViewById(R.id.nameOnNavigationTextViewPubPR);
         final String username = sharedPreferences.getString("name", null);
         nameOnNavigationTextView.setText(username);
 
-        TextView emailOnNavigationTextView = (TextView) hView.findViewById(R.id.emailOnNavigationTextView);
+        TextView emailOnNavigationTextView = (TextView) hView.findViewById(R.id.emailOnNavigationTextViewPubPR);
         final String email = sharedPreferences.getString("emailAddress", null);
         emailOnNavigationTextView.setText(email);
+
+        Button publicPostNextButton = (Button) findViewById(R.id.publicPostNextButton);
+
+        publicPostNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PostPublicActivity.this, SelectSubjectTagsActivity.class));
+            }
+        });
+
+
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutPubPR);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.post_public, menu);
         return true;
     }
 
@@ -96,12 +98,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        if (id == R.id.action_logoutPostPublicRequest) {
+            startActivity(new Intent(PostPublicActivity.this, LoginActivity.class));
             SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
-            editor.putBoolean("loggedIn", false);
+            editor.putBoolean("loggedIn",false);
             editor.commit();
             return true;
         }
@@ -115,25 +117,24 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.navHome) {
-            // Handle the action
-        } else if (id == R.id.navNotification) {
+        if (id == R.id.navHomePubPR) {
+            // Handle the camera action
+        } else if (id == R.id.navNotificationPubPR) {
 
-        } else if (id == R.id.navRequest) {
+        } else if (id == R.id.navRequestPubPR) {
 
-        } else if (id == R.id.navMessage) {
+        } else if (id == R.id.navMessagePubPR) {
 
-        } else if (id == R.id.navBookmark) {
+        } else if (id == R.id.navBookmarkPubPR) {
 
-        } else if (id == R.id.navProfile) {
+        } else if (id == R.id.navProfilePubPR) {
 
-        } else if (id == R.id.navOwnRequest) {
+        } else if (id == R.id.navOwnRequestPubPR) {
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutPubPR);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

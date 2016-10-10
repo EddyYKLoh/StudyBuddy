@@ -19,11 +19,21 @@
         app:title="Select subject tags"
         app:titleTextColor="#FFFFFF" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="check"
+        android:id="@+id/checkButton"
+        android:layout_alignParentBottom="true"/>
+
+
     <ListView
         android:id="@+id/selectSubjectTagListView"
         android:layout_below="@id/selectSubjectToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_above="@id/checkButton">
     </ListView>
+
 
 </RelativeLayout>

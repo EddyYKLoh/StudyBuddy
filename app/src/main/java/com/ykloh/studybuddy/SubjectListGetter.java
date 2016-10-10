@@ -24,7 +24,6 @@ import javax.net.ssl.HttpsURLConnection;
  */
 
 public class SubjectListGetter {
-
     private String sendGetRequest() {
         URL url = null;
         String response = "";
@@ -59,11 +58,20 @@ public class SubjectListGetter {
         return response;
     }
 
+    public boolean saveArray(String[] array, String arrayName, Context mContext) {
+        SharedPreferences prefs = mContext.getSharedPreferences("SubjectList", 0);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(arrayName + "_size", array.length);
+        for (int i = 0; i < array.length; i++)
+            editor.putString(arrayName + "_" + i, array[i]);
+        return editor.commit();
+    }
 
-    public void GetSubjects(final Context context, final AppCompatActivity activity) {
+
+    public void GetSubjects(final Context context) {
 
         class subjectGetter extends AsyncTask<Void, Void, String> {
-            private AppCompatActivity CurrentActivity = activity;
+            private AppCompatActivity CurrentActivity = (AppCompatActivity) context;
 
             @Override
             protected void onPostExecute(String s) {
@@ -73,11 +81,9 @@ public class SubjectListGetter {
 
                 } else {
                     String[] subjects = s.split(System.getProperty("line.separator"));
-                    CustomeAdapter adapter = new CustomeAdapter(context, subjects);
+                    saveArray(subjects, "subject", context);
 
-                    ListView listview = null;
-                    listview = (ListView)activity.findViewById(R.id.selectSubjectTagListView);
-                    listview.setAdapter(adapter);
+
                 }
             }
 

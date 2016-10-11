@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -108,7 +109,11 @@ public class SignUpService {
                 loading.dismiss();
 
                 if (s.equals("E-mail already exist.")||s.equals("Please try again.") ||s.equals("Couldn't connect to server.")) {
-                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+                    EmptyBuilder.setMessage(s)
+                            .setNegativeButton("OK", null)
+                            .create()
+                            .show();
 
                 } else {
 

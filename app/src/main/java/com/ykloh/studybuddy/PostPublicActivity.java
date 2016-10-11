@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,12 +63,20 @@ public class PostPublicActivity extends AppCompatActivity
         final String email = sharedPreferences.getString("emailAddress", null);
         emailOnNavigationTextView.setText(email);
 
+
+        final String userID = sharedPreferences.getString("userID", null);
         Button publicPostNextButton = (Button) findViewById(R.id.publicPostNextButton);
+
 
         publicPostNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(PostPublicActivity.this, SelectSubjectTagsActivity.class));
+                EditText publicPostTitleEditText = (EditText) findViewById(R.id.publicPostTitleEditText);
+                EditText publicPostDetailsEditText = (EditText) findViewById(R.id.publicPostDetailsEditText);
+                final String publicPostTitle = publicPostTitleEditText.getText().toString().trim();
+                final String publicPostDetails = publicPostDetailsEditText.getText().toString().trim();
+                PublicPostUploader publicPostUploader = new PublicPostUploader();
+                publicPostUploader.UploadPublicPost(PostPublicActivity.this, userID, publicPostTitle, publicPostDetails);
             }
         });
 
@@ -118,7 +128,8 @@ public class PostPublicActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.navHomePubPR) {
-            // Handle the camera action
+            // Handle the action
+            startActivity(new Intent(PostPublicActivity.this, MainActivity.class));
         } else if (id == R.id.navNotificationPubPR) {
 
         } else if (id == R.id.navRequestPubPR) {

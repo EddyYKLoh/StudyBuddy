@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -100,7 +101,12 @@ public class LoginService {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 if (s.equals("Invalid email or password.") || s.equals("Couldn't connect to server.")) {
-                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+
+                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+                    EmptyBuilder.setMessage(s)
+                            .setNegativeButton("OK", null)
+                            .create()
+                            .show();
 
                 } else {
 

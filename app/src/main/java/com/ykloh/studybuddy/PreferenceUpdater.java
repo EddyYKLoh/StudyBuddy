@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -89,34 +90,51 @@ public class PreferenceUpdater {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                if (s.equals("Saved.")) {
-                    context.startActivity(new Intent(context, UpdateProfileActivity.class));
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("loggedIn", true);
-                    editor.putString("meetType", meetingType);
-                    editor.putString("preferredLvlOfStudy", preferredLvlOfStudy);
-                    editor.commit();
+                if (s.equals("Please try again.") || s.equals("Couldn't connect to server.")) {
+
+                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+                    EmptyBuilder.setMessage(s)
+                            .setNegativeButton("OK", null)
+                            .create()
+                            .show();
+
+                } else {
+                    if (s.equals("Saved.")) {
+                        SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("loggedIn", true);
+                        editor.putString("meetType", meetingType);
+                        editor.putString("preferredLvlOfStudy", preferredLvlOfStudy);
+                        editor.commit();
+                        context.startActivity(new Intent(context, UpdateProfileActivity.class));
+
+                    }else{
+                        AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+                        EmptyBuilder.setMessage("Error")
+                                .setNegativeButton("OK", null)
+                                .create()
+                                .show();
+                    }
                 }
             }
 
-            @Override
-            protected String doInBackground(String... params) {
-                HashMap<String, String> data = new HashMap<String, String>();
-                data.put("emailAddress", params[0]);
-                data.put("meetingType", params[1]);
-                data.put("preferredLvlOfStudy", params[2]);
 
-                String result = sendPostRequest(data);
+        @Override
+        protected String doInBackground (String...params){
+            HashMap<String, String> data = new HashMap<String, String>();
+            data.put("emailAddress", params[0]);
+            data.put("meetingType", params[1]);
+            data.put("preferredLvlOfStudy", params[2]);
 
-                return result;
-            }
+            String result = sendPostRequest(data);
 
+            return result;
         }
 
-        preferenceUpdater pu = new preferenceUpdater();
-        pu.execute(emailAddress, meetingType, preferredLvlOfStudy);
-
     }
+
+    preferenceUpdater pu = new preferenceUpdater();
+    pu.execute(emailAddress,meetingType,preferredLvlOfStudy);
+
+}
 }

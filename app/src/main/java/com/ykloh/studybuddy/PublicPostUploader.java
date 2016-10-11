@@ -6,12 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.toolbox.StringRequest;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,15 +23,16 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by LYK on 10/3/2016.
+ * Created by LYK on 10/11/2016.
  */
 
-public class ProfilePictureUploader {
+public class PublicPostUploader {
+
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.90/StudyBuddy/uploadPicture.php");
+            url = new URL("http://192.168.43.90/StudyBuddy/publicPostUploader.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -54,19 +50,15 @@ public class ProfilePictureUploader {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = null;
                 StringBuffer buffer = new StringBuffer();
-                boolean uploadFailed = false;
+
                 boolean sqlError = false;
                 while ((line = bufferedReader.readLine()) != null) {
-                    if (line.equals("Upload failed."))
-                        uploadFailed = true;
-                    if (line.equals("Request failed."))
+                    if (line.equals("Please try again."))
                         sqlError = true;
                     buffer.append(line + '\n');
                 }
                 if (sqlError)
-                    response = "Request failed.";
-                else if (uploadFailed)
-                    response = "Upload failed.";
+                    response = "Please try again.";
                 else
                     response = buffer.toString();
             }
@@ -95,23 +87,24 @@ public class ProfilePictureUploader {
         return dataString.toString();
     }
 
-    public void UploadPicture(final Context context, String emailAddress, String image) {
+    public void UploadPublicPost(final Context context, final String userID, String publicPostTitle, String publicPostDetails) {
 
-        class PictureUploader extends AsyncTask<String, Void, String> {
+        class UploadPubPost extends AsyncTask<String, Void, String> {
 
             ProgressDialog loading;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(context, "Uploading...", null, true, true);
+                loading = ProgressDialog.show(context, "Saving...", null, true, true);
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                if (s.equals("Request failed.") || s.equals("Upload failed.") || s.equals("Couldn't connect to server.")) {
+
+                if (s.equals("Please try again.") || s.equals("Couldn't connect to server.")) {
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                     EmptyBuilder.setMessage(s)
                             .setNegativeButton("OK", null)
@@ -122,20 +115,24 @@ public class ProfilePictureUploader {
 
                     String[] returnMessage = s.split(System.getProperty("line.separator"));
                     Toast.makeText(context, returnMessage[0], Toast.LENGTH_LONG).show();
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("PublicPostUtil", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("profPicPath", returnMessage[1]);
+                    editor.putString("publicPostID", returnMessage[1]);
                     editor.commit();
-                    context.startActivity(new Intent(context, MainActivity.class));
+                    context.startActivity(new Intent(context, SelectSubjectTagsActivity.class));
 
                 }
+
             }
 
             @Override
             protected String doInBackground(String... params) {
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("emailAddress", params[0]);
-                data.put("image", params[1]);
+                data.put("userID", params[0]);
+                data.put("publicPostTitle", params[1]);
+                data.put("publicPostDetails", params[2]);
+
 
                 String result = sendPostRequest(data);
 
@@ -144,8 +141,9 @@ public class ProfilePictureUploader {
 
         }
 
-        PictureUploader pu = new PictureUploader();
-        pu.execute(emailAddress, image);
+        UploadPubPost upp = new UploadPubPost();
+        upp.execute(userID, publicPostTitle, publicPostDetails);
 
     }
 }
+

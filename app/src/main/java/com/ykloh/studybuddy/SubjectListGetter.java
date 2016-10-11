@@ -67,6 +67,11 @@ public class SubjectListGetter {
         return editor.commit();
     }
 
+    public static void removeArray(Context mContext, String arrayName) {
+        SharedPreferences prefs = mContext.getSharedPreferences("SubjectList", 0);
+        prefs.edit().clear().commit();
+    }
+
 
     public void GetSubjects(final Context context) {
 
@@ -77,7 +82,11 @@ public class SubjectListGetter {
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 if (s.equals("Request Failed.")) {
-                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+                    EmptyBuilder.setMessage(s)
+                            .setNegativeButton("OK", null)
+                            .create()
+                            .show();
 
                 } else {
                     String[] subjects = s.split(System.getProperty("line.separator"));
@@ -91,6 +100,7 @@ public class SubjectListGetter {
             protected String doInBackground(Void... Params) {
 
                 String result = sendGetRequest();
+                removeArray(context, "subject");
 
                 return result;
             }

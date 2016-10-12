@@ -18,9 +18,9 @@
                 android:id="@+id/welcomeImage"
                 android:layout_width="match_parent"
                 android:layout_height="450dp"
-                android:scaleType="fitXY"
+                android:background="@drawable/welcome"
                 android:elevation="4dp"
-                android:background="@drawable/welcome" />
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/loginTitle"

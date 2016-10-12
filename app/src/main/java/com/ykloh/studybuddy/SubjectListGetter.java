@@ -58,25 +58,10 @@ public class SubjectListGetter {
         return response;
     }
 
-    public boolean saveArray(String[] array, String arrayName, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("SubjectList", 0);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(arrayName + "_size", array.length);
-        for (int i = 0; i < array.length; i++)
-            editor.putString(arrayName + "_" + i, array[i]);
-        return editor.commit();
-    }
-
-    public static void removeArray(Context mContext, String arrayName) {
-        SharedPreferences prefs = mContext.getSharedPreferences("SubjectList", 0);
-        prefs.edit().clear().commit();
-    }
-
 
     public void GetSubjects(final Context context) {
 
         class subjectGetter extends AsyncTask<Void, Void, String> {
-            private AppCompatActivity CurrentActivity = (AppCompatActivity) context;
 
             @Override
             protected void onPostExecute(String s) {
@@ -89,9 +74,10 @@ public class SubjectListGetter {
                             .show();
 
                 } else {
-                    String[] subjects = s.split(System.getProperty("line.separator"));
-                    saveArray(subjects, "subject", context);
 
+                    Intent myIntent = new Intent(context, SelectSubjectTagsActivity.class);
+                    myIntent.putExtra("subjectList", s);
+                    context.startActivity(myIntent);
 
                 }
             }
@@ -100,8 +86,6 @@ public class SubjectListGetter {
             protected String doInBackground(Void... Params) {
 
                 String result = sendGetRequest();
-                removeArray(context, "subject");
-
                 return result;
             }
 
@@ -109,10 +93,7 @@ public class SubjectListGetter {
 
         subjectGetter sg = new subjectGetter();
         sg.execute();
-
-
     }
 
 
 }
-

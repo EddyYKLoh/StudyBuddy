@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_post_public_request"
+    android:id="@+id/publicPostRequestFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="16dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.ykloh.studybuddy.PostPublicActivity"
-    tools:showIn="@layout/app_bar_post_public">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <TextView
         android:id="@+id/publicPostTitleTextView"
@@ -44,20 +41,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="Next"/>
+        android:text="Next" />
 
     <EditText
         android:id="@+id/publicPostDetailsEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/publicPostNextButton"
-        android:layout_marginBottom="16dp"
         android:layout_below="@id/publicPostDetailsTextView"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text"
-        android:padding="10dp"
-        android:gravity="top"/>
-
+        android:gravity="top"
+        android:padding="10dp" />
 
 
 </RelativeLayout>
+

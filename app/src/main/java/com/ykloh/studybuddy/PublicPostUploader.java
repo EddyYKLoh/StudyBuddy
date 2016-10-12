@@ -120,7 +120,7 @@ public class PublicPostUploader {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("publicPostID", returnMessage[1]);
                     editor.commit();
-                    context.startActivity(new Intent(context, SelectSubjectTagsActivity.class));
+
 
                 }
 

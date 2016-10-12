@@ -108,7 +108,7 @@ public class PreferenceUpdater {
                         editor.commit();
                         context.startActivity(new Intent(context, UpdateProfileActivity.class));
 
-                    }else{
+                    } else {
                         AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                         EmptyBuilder.setMessage("Error")
                                 .setNegativeButton("OK", null)
@@ -119,22 +119,22 @@ public class PreferenceUpdater {
             }
 
 
-        @Override
-        protected String doInBackground (String...params){
-            HashMap<String, String> data = new HashMap<String, String>();
-            data.put("emailAddress", params[0]);
-            data.put("meetingType", params[1]);
-            data.put("preferredLvlOfStudy", params[2]);
+            @Override
+            protected String doInBackground(String... params) {
+                HashMap<String, String> data = new HashMap<String, String>();
+                data.put("emailAddress", params[0]);
+                data.put("meetingType", params[1]);
+                data.put("preferredLvlOfStudy", params[2]);
 
-            String result = sendPostRequest(data);
+                String result = sendPostRequest(data);
 
-            return result;
+                return result;
+            }
+
         }
 
+        preferenceUpdater pu = new preferenceUpdater();
+        pu.execute(emailAddress, meetingType, preferredLvlOfStudy);
+
     }
-
-    preferenceUpdater pu = new preferenceUpdater();
-    pu.execute(emailAddress,meetingType,preferredLvlOfStudy);
-
-}
 }

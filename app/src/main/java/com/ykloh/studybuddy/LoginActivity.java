@@ -36,14 +36,14 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
-        boolean loggedin = sharedPreferences.getBoolean("loggedIn",false);
-        if(loggedin){
+        boolean loggedin = sharedPreferences.getBoolean("loggedIn", false);
+        if (loggedin) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
 
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
-        loginButton = (Button) findViewById(R.id.loginButton); 
-        
+        loginButton = (Button) findViewById(R.id.loginButton);
+
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 String emailAddress = emailAddressEditText.getText().toString().trim().toLowerCase();
                 String password = passwordEditText.getText().toString().trim();
 
-                if (emailAddress.equals("")||emailAddress.equals(null)||password.equals("")||password.equals(null)) {
+                if (emailAddress.equals("") || emailAddress.equals(null) || password.equals("") || password.equals(null)) {
 
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(LoginActivity.this);
                     EmptyBuilder.setMessage("Please fill in your email and password.")

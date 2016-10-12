@@ -27,15 +27,12 @@ public class SelectSubjectTagsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_subject_tags);
 
-        SubjectListGetter subjectListGetter = new SubjectListGetter();
-        subjectListGetter.GetSubjects(SelectSubjectTagsActivity.this);
-        String[] subjects = loadArray("subject", this);
-        removeArray(this, "subject");
+        String subjectString = getIntent().getStringExtra("subjectList");
+        String[] subjects = subjectString.split(System.getProperty("line.separator"));
 
         for (int i = 0; i < subjects.length; i++) {
             list.add(new Subject(subjects[i]));
         }
-
 
         final CustomAdapter adapter = new CustomAdapter(this, list);
         ListView listview = (ListView) findViewById(R.id.selectSubjectTagListView);
@@ -48,7 +45,7 @@ public class SelectSubjectTagsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String responseText = null;
+                String responseText = "";
                 boolean first = true;
                 List<Subject> subjectList = list;
                 for (int i = 0; i < subjectList.size(); i++) {
@@ -63,11 +60,16 @@ public class SelectSubjectTagsActivity extends AppCompatActivity {
                     }
                 }
 
-                Toast.makeText(getApplicationContext(),
-                        responseText, Toast.LENGTH_LONG).show();
-
-                String[] subjects = responseText.split(System.getProperty("line.separator"));
-
+                if (responseText.equals("")) {
+                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(SelectSubjectTagsActivity.this);
+                    EmptyBuilder.setMessage("Subject tags are required for your post.")
+                            .setNegativeButton("OK", null)
+                            .create()
+                            .show();
+                } else {
+                    SubjectTagAdder subjectTagAdder = new SubjectTagAdder();
+                    subjectTagAdder.AddSubjectTag(SelectSubjectTagsActivity.this, responseText);
+                }
 
 
             }
@@ -75,19 +77,5 @@ public class SelectSubjectTagsActivity extends AppCompatActivity {
 
     }
 
-
-    public static void removeArray(Context mContext, String arrayName) {
-        SharedPreferences prefs = mContext.getSharedPreferences("SubjectList", 0);
-        prefs.edit().clear().commit();
-    }
-
-    public String[] loadArray(String arrayName, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("SubjectList", 0);
-        int size = prefs.getInt(arrayName + "_size", 0);
-        String array[] = new String[size];
-        for (int i = 0; i < size; i++)
-            array[i] = prefs.getString(arrayName + "_" + i, null);
-        return array;
-    }
 }
 

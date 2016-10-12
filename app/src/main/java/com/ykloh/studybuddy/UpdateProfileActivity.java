@@ -57,7 +57,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     ProfilePictureUploader profilePictureUploader = new ProfilePictureUploader();
                     profilePictureUploader.UploadPicture(UpdateProfileActivity.this, emailAddress, imageString);
 
-                }else {
+                } else {
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(UpdateProfileActivity.this);
                     EmptyBuilder.setMessage("Please choose a photo.")
                             .setNegativeButton("OK", null)

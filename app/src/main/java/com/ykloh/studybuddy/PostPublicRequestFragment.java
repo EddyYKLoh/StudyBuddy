@@ -25,6 +25,7 @@ public class PostPublicRequestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.public_post_fragment, container, false);
         getActivity().setTitle("Create public post");
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         final String userID = sharedPreferences.getString("userID", null);
         Button postPublicRequestNextButton = (Button) thisView.findViewById(R.id.publicPostNextButton);

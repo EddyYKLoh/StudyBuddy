@@ -29,16 +29,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+          window.setStatusBarColor(Color.BLACK);
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         boolean loggedin = sharedPreferences.getBoolean("loggedIn", false);
         if (loggedin) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         }
 
         createAccountButton = (Button) findViewById(R.id.createAccountButton);

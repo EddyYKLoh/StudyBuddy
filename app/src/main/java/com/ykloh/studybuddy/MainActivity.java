@@ -64,22 +64,30 @@ public class MainActivity extends AppCompatActivity
         TextView emailOnNavigationTextView = (TextView) hView.findViewById(R.id.emailOnNavigationTextView);
         final String email = sharedPreferences.getString("emailAddress", null);
         emailOnNavigationTextView.setText(email);
+
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContentFrame, new HomeFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (getFragmentManager().getBackStackEntryCount() > 0) {
+        } else if (getFragmentManager().getBackStackEntryCount() > 1) {
             getFragmentManager().popBackStack();
-        } else
-
-        {
+        } else if (getFragmentManager().getBackStackEntryCount() == 1) {
+            finish();
+        } else {
             super.onBackPressed();
         }
-
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

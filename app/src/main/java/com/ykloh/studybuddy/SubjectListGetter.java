@@ -28,7 +28,7 @@ public class SubjectListGetter {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.90/StudyBuddy/subjectGetter.php");
+            url = new URL("http://192.168.43.77/StudyBuddy/subjectGetter.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setDoInput(true);

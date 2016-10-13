@@ -134,6 +134,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.navNotification) {
 
         } else if (id == R.id.navRequest) {
+            SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+            String userID = sharedPreferences.getString("userID", null);
+            RequestGetter requestGetter = new RequestGetter();
+            requestGetter.RequestLoader(MainActivity.this, userID);
+
 
         } else if (id == R.id.navMessage) {
 

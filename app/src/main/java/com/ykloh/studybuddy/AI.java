@@ -1,8 +1,7 @@
 package com.ykloh.studybuddy;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -23,16 +22,15 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by LYK on 10/11/2016.
+ * Created by LYK on 10/13/2016.
  */
 
-public class PublicPostUploader {
-
+public class AI {
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.77/StudyBuddy/publicPostUploader.php");
+            url = new URL("http://192.168.43.77/StudyBuddy/runningNBC.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -50,16 +48,10 @@ public class PublicPostUploader {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = null;
                 StringBuffer buffer = new StringBuffer();
-
-                boolean sqlError = false;
                 while ((line = bufferedReader.readLine()) != null) {
-                    if (line.equals("Please try again."))
-                        sqlError = true;
                     buffer.append(line + '\n');
                 }
-                if (sqlError)
-                    response = "Please try again.";
-                else
+
                     response = buffer.toString();
             }
 
@@ -87,52 +79,29 @@ public class PublicPostUploader {
         return dataString.toString();
     }
 
-    public void UploadPublicPost(final Context context, final String userID, String publicPostTitle, String publicPostDetails) {
+    public void RunAlgorithm(final Context context, final String subjectTags) {
 
-        class UploadPubPost extends AsyncTask<String, Void, String> {
-
-            ProgressDialog loading;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                loading = ProgressDialog.show(context, "Saving...", null, true, true);
-            }
+        class RunAI extends AsyncTask<String, Void, String> {
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                loading.dismiss();
-
-                if (s.equals("Please try again.") || s.equals("Couldn't connect to server.")) {
-                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
-                    EmptyBuilder.setMessage(s)
-                            .setNegativeButton("OK", null)
-                            .create()
-                            .show();
-
-                } else {
-
-                    String[] returnMessage = s.split(System.getProperty("line.separator"));
-//                    Toast.makeText(context, returnMessage[0], Toast.LENGTH_LONG).show();
-
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("PublicPostUtil", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("publicPostID", returnMessage[1]);
-                    editor.commit();
-
+                AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+                EmptyBuilder.setMessage(s)
+                        .setNegativeButton("OK", null)
+                        .create()
+                        .show();
 
                 }
 
-            }
 
             @Override
             protected String doInBackground(String... params) {
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("userID", params[0]);
-                data.put("publicPostTitle", params[1]);
-                data.put("publicPostDetails", params[2]);
-
+                data.put("userPreferredMeetingType", params[0]);
+                data.put("levelOfStudyPreference", params[1]);
+                data.put("postID", params[2]);
+                data.put("subjects", params[3]);
 
                 String result = sendPostRequest(data);
 
@@ -141,9 +110,17 @@ public class PublicPostUploader {
 
         }
 
-        UploadPubPost upp = new UploadPubPost();
-        upp.execute(userID, publicPostTitle, publicPostDetails);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("PublicPostUtil", Context.MODE_PRIVATE);
+        String postID = sharedPreferences.getString("publicPostID", null);
+        SharedPreferences sharedPreferencesUser = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        String preferredMeetingType = sharedPreferencesUser.getString("meetingType", null);
+        String preferredLevelOfStudy = sharedPreferencesUser.getString("prefLvlOfStudy", null);
+
+
+        RunAI ai = new RunAI();
+        ai.execute(preferredMeetingType, preferredLevelOfStudy, postID, subjectTags);
 
     }
-}
 
+
+}

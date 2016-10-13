@@ -31,7 +31,7 @@ public class LoginService {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.90/StudyBuddy/login.php");
+            url = new URL("http://192.168.43.77/StudyBuddy/login.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);

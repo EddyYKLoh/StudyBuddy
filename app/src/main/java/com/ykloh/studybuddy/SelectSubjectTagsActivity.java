@@ -67,8 +67,14 @@ public class SelectSubjectTagsActivity extends AppCompatActivity {
                             .create()
                             .show();
                 } else {
+                    AI AI = new AI();
+                    AI.RunAlgorithm(SelectSubjectTagsActivity.this, responseText);
+
+
                     SubjectTagAdder subjectTagAdder = new SubjectTagAdder();
                     subjectTagAdder.AddSubjectTag(SelectSubjectTagsActivity.this, responseText);
+
+
                 }
 
 

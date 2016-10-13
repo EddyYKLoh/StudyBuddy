@@ -32,7 +32,7 @@ public class SignUpService {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.90/StudyBuddy/signUp.php");
+            url = new URL("http://192.168.43.77/StudyBuddy/signUp.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);

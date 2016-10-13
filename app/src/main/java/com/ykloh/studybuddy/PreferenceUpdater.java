@@ -31,7 +31,7 @@ public class PreferenceUpdater {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.90/StudyBuddy/updatePreference.php");
+            url = new URL("http://192.168.43.77/StudyBuddy/updatePreference.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);

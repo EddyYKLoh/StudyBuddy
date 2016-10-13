@@ -20,7 +20,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         thisView = inflater.inflate(R.layout.home_fragment, container, false);
-        getActivity().setTitle("HomeFragment");
+        getActivity().setTitle("Home");
         FloatingActionButton fab = (FloatingActionButton) thisView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

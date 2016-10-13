@@ -31,7 +31,7 @@ public class SubjectTagAdder {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.90/StudyBuddy/addSubjectTag.php");
+            url = new URL("http://192.168.43.77/StudyBuddy/addSubjectTag.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -111,9 +111,7 @@ public class SubjectTagAdder {
                 } else if (s.equals("Successfully posted.")) {
 
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                    SharedPreferences prefs = context.getSharedPreferences("SubjectList", Context.MODE_PRIVATE);
-                    prefs.edit().clear().commit();
-                    context.startActivity(new Intent(context, MainActivity.class));
+//                    context.startActivity(new Intent(context, MainActivity.class));
 
                 }
 

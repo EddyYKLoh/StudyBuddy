@@ -2,6 +2,8 @@ package com.ykloh.studybuddy;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +32,7 @@ public class AI {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.77/StudyBuddy/runningNBC.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/runningNBC.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -86,11 +88,19 @@ public class AI {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
-                EmptyBuilder.setMessage(s)
-                        .setNegativeButton("OK", null)
-                        .create()
-                        .show();
+                context.startActivity(new Intent(context, MainActivity.class));
+
+//                AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+//                EmptyBuilder.setMessage(s)
+//                        .setCancelable(false)
+//                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//
+//                                context.startActivity(new Intent(context, MainActivity.class));
+//                            }
+//                        })
+//                        .create()
+//                        .show();
 
                 }
 
@@ -102,6 +112,7 @@ public class AI {
                 data.put("levelOfStudyPreference", params[1]);
                 data.put("postID", params[2]);
                 data.put("subjects", params[3]);
+                data.put("userID", params[4]);
 
                 String result = sendPostRequest(data);
 
@@ -115,10 +126,11 @@ public class AI {
         SharedPreferences sharedPreferencesUser = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
         String preferredMeetingType = sharedPreferencesUser.getString("meetingType", null);
         String preferredLevelOfStudy = sharedPreferencesUser.getString("prefLvlOfStudy", null);
+        String userID = sharedPreferencesUser.getString("userID", null);
 
 
         RunAI ai = new RunAI();
-        ai.execute(preferredMeetingType, preferredLevelOfStudy, postID, subjectTags);
+        ai.execute(preferredMeetingType, preferredLevelOfStudy, postID, subjectTags, userID);
 
     }
 

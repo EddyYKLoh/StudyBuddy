@@ -65,11 +65,10 @@ public class MainActivity extends AppCompatActivity
         final String email = sharedPreferences.getString("emailAddress", null);
         emailOnNavigationTextView.setText(email);
 
-        android.app.FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.mainContentFrame, new HomeFragment())
-                .addToBackStack(null)
-                .commit();
+        AllPublicPostGetter publicPostGetter = new AllPublicPostGetter();
+        publicPostGetter.PublicPostLoader(MainActivity.this);
+
+
     }
 
     @Override
@@ -126,11 +125,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.navHome) {
             // Handle the action
-            android.app.FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.mainContentFrame, new HomeFragment())
-                    .addToBackStack(null)
-                    .commit();
+            AllPublicPostGetter publicPostGetter = new AllPublicPostGetter();
+            publicPostGetter.PublicPostLoader(MainActivity.this);
         } else if (id == R.id.navNotification) {
 
         } else if (id == R.id.navRequest) {

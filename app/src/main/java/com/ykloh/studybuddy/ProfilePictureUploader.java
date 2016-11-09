@@ -36,7 +36,7 @@ public class ProfilePictureUploader {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.77/StudyBuddy/uploadPicture.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/uploadPicture.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);

@@ -20,30 +20,19 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-
-
-
 /**
- * Created by LYK on 10/14/2016.
+ * Created by LYK on 11/9/2016.
  */
 
-public class RequestGetter {
-    private String sendPostRequest(HashMap<String, String> postDataParams) {
+public class AllPublicPostGetter {
+    private String sendGetRequest() {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/requestGetter.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/allPublicPostGetter.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod("GET");
             connection.setDoInput(true);
-            connection.setDoOutput(true);
-
-            OutputStream outputStream = connection.getOutputStream();
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            bufferedWriter.write(getPostDataString(postDataParams));
-            bufferedWriter.flush();
-            bufferedWriter.close();
-            outputStream.close();
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpsURLConnection.HTTP_OK) {
@@ -54,7 +43,7 @@ public class RequestGetter {
                     buffer.append(line + '\n');
                 }
 
-                    response = buffer.toString();
+                response = buffer.toString();
 
 
             }
@@ -68,24 +57,8 @@ public class RequestGetter {
         return response;
     }
 
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder dataString = new StringBuilder();
-        boolean first = true;
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (first)
-                first = false;
-            else
-                dataString.append("&");
 
-            dataString.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            dataString.append("=");
-            dataString.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return dataString.toString();
-    }
-
-    public void RequestLoader(final Context context, String userID) {
+    public void PublicPostLoader(final Context context) {
 
         class Loader extends AsyncTask<String, Void, String> {
 
@@ -103,13 +76,13 @@ public class RequestGetter {
                 } else {
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("RequestList", s);
+                    bundle.putString("PublicPostList", s);
 
-                    RequestFragment requestFragment = new RequestFragment();
+                    HomeFragment homeFragment = new HomeFragment();
                     android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-                    requestFragment.setArguments(bundle);
+                    homeFragment.setArguments(bundle);
                     fragmentManager.beginTransaction()
-                            .replace(R.id.mainContentFrame, requestFragment )
+                            .replace(R.id.mainContentFrame, homeFragment )
                             .addToBackStack(null)
                             .commit();
 
@@ -120,17 +93,15 @@ public class RequestGetter {
 
             @Override
             protected String doInBackground(String... params) {
-                HashMap<String, String> data = new HashMap<String, String>();
-                data.put("userID", params[0]);
 
-                String result = sendPostRequest(data);
+                String result = sendGetRequest();
 
                 return result;
             }
         }
 
         Loader lo = new Loader();
-        lo.execute(userID);
+        lo.execute();
 
     }
 }

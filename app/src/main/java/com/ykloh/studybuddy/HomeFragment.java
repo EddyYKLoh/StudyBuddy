@@ -7,12 +7,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by LYK on 10/13/2016.
  */
 
 public class HomeFragment extends Fragment {
+
+    List<PublicPost> list = new ArrayList<PublicPost>();
 
     View thisView;
 
@@ -33,6 +39,28 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        String postString = "";
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            postString = bundle.getString("PublicPostList");
+        }
+
+
+        if (postString.equals("")) {
+
+        } else {
+            String[] individualPost = postString.split(System.getProperty("line.separator"));
+
+            for (int i = 0; i < individualPost.length; i++) {
+                String[] postElements = individualPost[i].split("\\.");
+                list.add(new PublicPost(postElements[1], postElements[0]));
+            }
+
+            final HomeCustomAdapter adapter = new HomeCustomAdapter(getActivity(), list);
+            ListView listView = (ListView) thisView.findViewById(R.id.homeListView);
+            listView.setAdapter(adapter);
+        }
 
         return thisView;
 

@@ -7,11 +7,14 @@ package com.ykloh.studybuddy;
 public class PublicPost {
     private String publicPostTitle;
     private String userName;
+    private String profilePictureUrl;
 
-    public PublicPost(String postTitle, String userName){
+    public PublicPost(String postTitle, String userName, String profilePictureUrl){
         this.publicPostTitle = postTitle;
         this.userName = userName;
+        this.profilePictureUrl = profilePictureUrl;
     }
+
     public String getUserName(){
         return userName;
     }
@@ -19,6 +22,12 @@ public class PublicPost {
     public String getPublicPostTitle(){
         return publicPostTitle;
     }
+
+    public String getProfilePictureUrl(){
+        return profilePictureUrl;
+    }
+
+
 
 
 }

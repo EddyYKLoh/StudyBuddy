@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -53,7 +49,7 @@ public class MainActivity extends AppCompatActivity
 
         ImageView profilePicture = (ImageView) hView.findViewById(R.id.profilePictureNavImageView);
         final String profPicPath = sharedPreferences.getString("profPicPath", null);
-        ImageLoader profilePictureLoader = new ImageLoader();
+        NavProfilePictureLoader profilePictureLoader = new NavProfilePictureLoader();
         profilePictureLoader.getImageView(profilePicture);
         profilePictureLoader.execute(profPicPath);
 

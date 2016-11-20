@@ -41,11 +41,11 @@ public class RequestFragment extends Fragment {
             String[] individualPost = postString.split(System.getProperty("line.separator"));
 
             for (int i = 0; i < individualPost.length; i++) {
-                String[] postElements = individualPost[i].split("\\.");
-                list.add(new PublicPost(postElements[1], postElements[0]));
+                String[] postElements = individualPost[i].split("<SEPARATE>");
+                list.add(new PublicPost(postElements[1], postElements[0], postElements[2]));
             }
 
-            final RequestCustomAdapter adapter = new RequestCustomAdapter(getActivity(), list);
+            final RequestAdapter adapter = new RequestAdapter(getActivity(), list);
             ListView listView = (ListView) thisView.findViewById(R.id.requestListView);
             listView.setAdapter(adapter);
         }

@@ -16,7 +16,7 @@ import java.net.URL;
  */
 
 
-public class ImageLoader extends AsyncTask<String, Void, Bitmap> {
+public class NavProfilePictureLoader extends AsyncTask<String, Void, Bitmap> {
 
     private ImageView targetIV;
 

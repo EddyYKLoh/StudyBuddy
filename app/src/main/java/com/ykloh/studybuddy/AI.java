@@ -54,7 +54,7 @@ public class AI {
                     buffer.append(line + '\n');
                 }
 
-                    response = buffer.toString();
+                response = buffer.toString();
             }
 
         } catch (Exception e) {
@@ -102,7 +102,7 @@ public class AI {
 //                        .create()
 //                        .show();
 
-                }
+            }
 
 
             @Override

@@ -100,12 +100,15 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
             SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.putBoolean("loggedIn", false);
             editor.commit();
+
+            Intent toLogin = new Intent(MainActivity.this, LoginActivity.class);
+            toLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(toLogin);
 
             return true;
         }

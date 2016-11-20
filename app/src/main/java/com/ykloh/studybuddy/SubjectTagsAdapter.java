@@ -17,12 +17,12 @@ import java.util.List;
  * Created by LYK on 10/10/2016.
  */
 
-public class CustomAdapter extends ArrayAdapter<Subject> {
+public class SubjectTagsAdapter extends ArrayAdapter<Subject> {
 
     private final List<Subject> list;
     Context context;
 
-    public CustomAdapter(Context context, List<Subject> list) {
+    public SubjectTagsAdapter(Context context, List<Subject> list) {
         super(context, R.layout.select_subject_row, list);
         this.context = context;
         this.list = list;

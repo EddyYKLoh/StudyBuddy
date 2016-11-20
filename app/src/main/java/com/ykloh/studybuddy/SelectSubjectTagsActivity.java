@@ -1,19 +1,11 @@
 package com.ykloh.studybuddy;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +26,7 @@ public class SelectSubjectTagsActivity extends AppCompatActivity {
             list.add(new Subject(subjects[i]));
         }
 
-        final CustomAdapter adapter = new CustomAdapter(this, list);
+        final SubjectTagsAdapter adapter = new SubjectTagsAdapter(this, list);
         ListView listview = (ListView) findViewById(R.id.selectSubjectTagListView);
         listview.setAdapter(adapter);
 

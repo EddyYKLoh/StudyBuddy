@@ -54,7 +54,7 @@ public class RequestGetter {
                     buffer.append(line + '\n');
                 }
 
-                    response = buffer.toString();
+                response = buffer.toString();
 
 
             }

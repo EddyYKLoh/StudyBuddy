@@ -75,5 +75,9 @@ public class SelectSubjectTagsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }
 

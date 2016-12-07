@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.AdapterView;
 
 /**
  * Created by LYK on 12/6/2016.
@@ -34,7 +33,21 @@ public class PublicPostViewerPicker {
         String userID = sharedPreferences.getString("userID", null);
         //TODO helperID
         if(this.ownerID.equals(userID)){
-            //TODO intent to fragment
+            Bundle bundle = new Bundle();
+            bundle.putString("picture", this.profilePictureUrl);
+            bundle.putString("name", this.userName);
+            bundle.putString("title", this.publicPostTitle);
+            bundle.putString("detail", this.details);
+            bundle.putString("ownerID", this.ownerID);
+            bundle.putString("postID", this.postID);
+
+            ViewOwnPostFragment viewOwnPostFragment = new ViewOwnPostFragment();
+            android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
+            viewOwnPostFragment.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContentFrame, viewOwnPostFragment )
+                    .addToBackStack(null)
+                    .commit();
         }
         else {
             Bundle bundle = new Bundle();

@@ -7,7 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,12 +56,25 @@ public class HomeFragment extends Fragment {
 
             for (int i = 0; i < individualPost.length; i++) {
                 String[] postElements = individualPost[i].split("<SEPARATE>");
-                list.add(new PublicPost(postElements[1], postElements[0], postElements[2]));
+                list.add(new PublicPost(postElements[0], postElements[1], postElements[2], postElements[3], postElements[4], postElements[5]));
             }
 
             final RequestAdapter adapter = new RequestAdapter(getActivity(), list);
             ListView listView = (ListView) thisView.findViewById(R.id.homeListView);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    PublicPost publicPost = (PublicPost) parent.getItemAtPosition(position);
+                    PublicPostViewerPicker publicPostViewerPicker = new PublicPostViewerPicker(publicPost.getProfilePictureUrl()
+                            , publicPost.getUserName()
+                            , publicPost.getPublicPostTitle()
+                            , publicPost.getDetails()
+                            , publicPost.getOwnerID()
+                            , publicPost.getPostID()
+                            , thisView.getContext());
+                }
+            });
         }
 
         return thisView;

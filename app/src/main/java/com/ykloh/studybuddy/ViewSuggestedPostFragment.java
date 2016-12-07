@@ -1,8 +1,6 @@
 package com.ykloh.studybuddy;
 
-
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,7 +13,11 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
-public class ViewPublicPostFragment extends Fragment {
+/**
+ * Created by LYK on 12/8/2016.
+ */
+
+public class ViewSuggestedPostFragment extends Fragment {
     View thisView;
 
     ImageLoader.ImageCache imageCache = new BitmapLruCache();
@@ -25,20 +27,22 @@ public class ViewPublicPostFragment extends Fragment {
     private TextView titleTV;
     private TextView detailsTV;
     private TextView subjectTagsTV;
-    private Button helpButton;
+    private Button acceptButton;
+    private Button dismissButton;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        thisView = inflater.inflate(R.layout.view_public_post_fragment, container, false);
+        thisView = inflater.inflate(R.layout.view_suggested_post_fragment, container, false);
         getActivity().setTitle("Request");
 
-        profilePicture = (NetworkImageView) thisView.findViewById(R.id.viewPubPostProfilePicNIV);
-        nameTV = (TextView) thisView.findViewById(R.id.viewPubPostName);
-        titleTV = (TextView) thisView.findViewById(R.id.viewPubPostTitle);
-        detailsTV = (TextView) thisView.findViewById(R.id.viewPubPostDetails);
-        subjectTagsTV = (TextView) thisView.findViewById(R.id.viewPubPostSubjectTags);
-        helpButton = (Button) thisView.findViewById(R.id.viewPubPostHelpButton);
+        profilePicture = (NetworkImageView) thisView.findViewById(R.id.viewSuggestedPostProfilePicNIV);
+        nameTV = (TextView) thisView.findViewById(R.id.viewSuggestedPostName);
+        titleTV = (TextView) thisView.findViewById(R.id.viewSuggestedPostTitle);
+        detailsTV = (TextView) thisView.findViewById(R.id.viewSuggestedPostDetails);
+        subjectTagsTV = (TextView) thisView.findViewById(R.id.viewSuggestedPostSubjectTags);
+        acceptButton = (Button) thisView.findViewById(R.id.viewSuggestedPostAcceptButton);
+        dismissButton = (Button) thisView.findViewById(R.id.viewSuggestedPostDismissButton);
 
         final Bundle bundle = getArguments();
         String profilePictureUrl = bundle.getString("picture");
@@ -57,22 +61,13 @@ public class ViewPublicPostFragment extends Fragment {
         ViewSubjectTagsGetter viewSubjectTagsGetter = new ViewSubjectTagsGetter();
         viewSubjectTagsGetter.load(thisView.getContext(), postID, subjectTagsTV);
 
-        helpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OfferHelp offerHelp = new OfferHelp();
-                offerHelp.submitHelp(thisView.getContext(), postID, bundle);
-
-            }
-        });
-
-
-
-
+        //TODO accept
+        //TODO dismiss
 
 
 
 
         return thisView;
     }
+
 }

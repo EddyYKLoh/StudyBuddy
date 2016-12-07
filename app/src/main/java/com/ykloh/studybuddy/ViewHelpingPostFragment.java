@@ -1,8 +1,6 @@
 package com.ykloh.studybuddy;
 
-
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,7 +13,11 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
-public class ViewPublicPostFragment extends Fragment {
+/**
+ * Created by LYK on 12/7/2016.
+ */
+
+public class ViewHelpingPostFragment extends Fragment {
     View thisView;
 
     ImageLoader.ImageCache imageCache = new BitmapLruCache();
@@ -25,20 +27,22 @@ public class ViewPublicPostFragment extends Fragment {
     private TextView titleTV;
     private TextView detailsTV;
     private TextView subjectTagsTV;
-    private Button helpButton;
+    private Button completedButton;
+    private Button cancelButton;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        thisView = inflater.inflate(R.layout.view_public_post_fragment, container, false);
+        thisView = inflater.inflate(R.layout.view_helping_post_fragment, container, false);
         getActivity().setTitle("Request");
 
-        profilePicture = (NetworkImageView) thisView.findViewById(R.id.viewPubPostProfilePicNIV);
-        nameTV = (TextView) thisView.findViewById(R.id.viewPubPostName);
-        titleTV = (TextView) thisView.findViewById(R.id.viewPubPostTitle);
-        detailsTV = (TextView) thisView.findViewById(R.id.viewPubPostDetails);
-        subjectTagsTV = (TextView) thisView.findViewById(R.id.viewPubPostSubjectTags);
-        helpButton = (Button) thisView.findViewById(R.id.viewPubPostHelpButton);
+        profilePicture = (NetworkImageView) thisView.findViewById(R.id.viewHelpPostProfilePicNIV);
+        nameTV = (TextView) thisView.findViewById(R.id.viewHelpPostName);
+        titleTV = (TextView) thisView.findViewById(R.id.viewHelpPostTitle);
+        detailsTV = (TextView) thisView.findViewById(R.id.viewHelpPostDetails);
+        subjectTagsTV = (TextView) thisView.findViewById(R.id.viewHelpPostSubjectTags);
+        completedButton = (Button) thisView.findViewById(R.id.viewHelpPostCompletedButton);
+        cancelButton = (Button) thisView.findViewById(R.id.viewHelpPostCancelButton);
 
         final Bundle bundle = getArguments();
         String profilePictureUrl = bundle.getString("picture");
@@ -57,22 +61,18 @@ public class ViewPublicPostFragment extends Fragment {
         ViewSubjectTagsGetter viewSubjectTagsGetter = new ViewSubjectTagsGetter();
         viewSubjectTagsGetter.load(thisView.getContext(), postID, subjectTagsTV);
 
-        helpButton.setOnClickListener(new View.OnClickListener() {
+        this.completedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferHelp offerHelp = new OfferHelp();
-                offerHelp.submitHelp(thisView.getContext(), postID, bundle);
+                CompleteHelp completeHelp = new CompleteHelp();
+                completeHelp.submitCompleteHelp(thisView.getContext(), postID, bundle);
 
             }
         });
 
-
-
-
-
-
-
+        //TODO cancel
 
         return thisView;
     }
+
 }

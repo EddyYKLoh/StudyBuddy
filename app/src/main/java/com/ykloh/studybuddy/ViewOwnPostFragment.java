@@ -59,7 +59,8 @@ public class ViewOwnPostFragment extends Fragment {
         ViewSubjectTagsGetter viewSubjectTagsGetter = new ViewSubjectTagsGetter();
         viewSubjectTagsGetter.load(thisView.getContext(), postID, subjectTagsTV);
 
-
+        //TODO delete
+        //TODO end
 
 
 

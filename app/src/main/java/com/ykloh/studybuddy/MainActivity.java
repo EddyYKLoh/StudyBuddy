@@ -126,20 +126,24 @@ public class MainActivity extends AppCompatActivity
             // Handle the action
             AllPublicPostGetter publicPostGetter = new AllPublicPostGetter();
             publicPostGetter.PublicPostLoader(MainActivity.this);
-        } else if (id == R.id.navNotification) {
-
-        } else if (id == R.id.navRequest) {
+        }
+//        else if (id == R.id.navNotification) {
+//
+//        }
+        else if (id == R.id.navRequest) {
             SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
             String userID = sharedPreferences.getString("userID", null);
             RequestGetter requestGetter = new RequestGetter();
             requestGetter.RequestLoader(MainActivity.this, userID);
 
 
-        } else if (id == R.id.navMessage) {
-
-        } else if (id == R.id.navBookmark) {
-
-        } else if (id == R.id.navProfile) {
+        }
+//        else if (id == R.id.navMessage) {
+//
+//        } else if (id == R.id.navBookmark) {
+//
+//        }
+        else if (id == R.id.navProfile) {
 
         } else if (id == R.id.navOwnRequest) {
 

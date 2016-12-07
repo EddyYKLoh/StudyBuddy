@@ -53,13 +53,8 @@ public class RequestFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     PublicPost publicPost = (PublicPost) parent.getItemAtPosition(position);
-                    PublicPostViewerPicker publicPostViewerPicker = new PublicPostViewerPicker(publicPost.getProfilePictureUrl()
-                            , publicPost.getUserName()
-                            , publicPost.getPublicPostTitle()
-                            , publicPost.getDetails()
-                            , publicPost.getOwnerID()
-                            , publicPost.getPostID()
-                            , thisView.getContext());
+                    UIPickerHelperFilter UIPickerHelperFilter = new UIPickerHelperFilter();
+                    UIPickerHelperFilter.processUISelection(thisView.getContext(), publicPost);
 
 
                 }

@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,7 +18,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -85,7 +90,7 @@ public class RequestGetter {
         return dataString.toString();
     }
 
-    public void RequestLoader(final Context context, String userID) {
+    public void RequestLoader(final Context context, String userID, final ListView listView) {
 
         class Loader extends AsyncTask<String, Void, String> {
 
@@ -102,16 +107,35 @@ public class RequestGetter {
 
                 } else {
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("RequestList", s);
 
-                    RequestFragment requestFragment = new RequestFragment();
-                    android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-                    requestFragment.setArguments(bundle);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.mainContentFrame, requestFragment )
-                            .addToBackStack(null)
-                            .commit();
+                    List<PublicPost> list = new ArrayList<PublicPost>();
+                    String postString = s;
+
+
+                    if (postString.equals("")) {
+
+                    } else {
+                        String[] individualPost = postString.split(System.getProperty("line.separator"));
+
+                        for (int i = 0; i < individualPost.length; i++) {
+                            String[] postElements = individualPost[i].split("<SEPARATE>");
+                            list.add(new PublicPost(postElements[0], postElements[1], postElements[2], postElements[3], postElements[4], postElements[5]));
+                        }
+
+                        RequestAdapter adapter = new RequestAdapter(context, list);
+
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                PublicPost publicPost = (PublicPost) parent.getItemAtPosition(position);
+                                UIPickerHelperFilter UIPickerHelperFilter = new UIPickerHelperFilter();
+                                UIPickerHelperFilter.processUISelection(context, publicPost);
+
+
+                            }
+                        });
+                    }
 
 
                 }

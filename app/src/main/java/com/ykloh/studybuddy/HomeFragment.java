@@ -1,6 +1,8 @@
 package com.ykloh.studybuddy;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,13 +21,12 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    List<PublicPost> list = new ArrayList<PublicPost>();
-
     View thisView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         thisView = inflater.inflate(R.layout.home_fragment, container, false);
         getActivity().setTitle("Home");
         FloatingActionButton fab = (FloatingActionButton) thisView.findViewById(R.id.fab);
@@ -40,41 +41,22 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        String postString = "";
+        ListView listView = (ListView) thisView.findViewById(R.id.homeListView);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            postString = bundle.getString("PublicPostList");
-        }
-
-
-        if (postString.equals("")) {
-
-        } else {
-            String[] individualPost = postString.split(System.getProperty("line.separator"));
-
-            for (int i = 0; i < individualPost.length; i++) {
-                String[] postElements = individualPost[i].split("<SEPARATE>");
-                list.add(new PublicPost(postElements[0], postElements[1], postElements[2], postElements[3], postElements[4], postElements[5]));
-            }
-
-            final RequestAdapter adapter = new RequestAdapter(getActivity(), list);
-            ListView listView = (ListView) thisView.findViewById(R.id.homeListView);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    PublicPost publicPost = (PublicPost) parent.getItemAtPosition(position);
-                    UIPickerHelperFilter UIPickerHelperFilter = new UIPickerHelperFilter();
-                    UIPickerHelperFilter.processUISelection(thisView.getContext(), publicPost);
-
-                }
-            });
-        }
+        AllPublicPostGetter publicPostGetter = new AllPublicPostGetter();
+        publicPostGetter.PublicPostLoader(thisView.getContext(), listView);
 
         return thisView;
 
     }
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        ListView listView = (ListView) thisView.findViewById(R.id.homeListView);
+        AllPublicPostGetter publicPostGetter = new AllPublicPostGetter();
+        publicPostGetter.PublicPostLoader(thisView.getContext(), listView);
+
+    }
 
 }

@@ -2,8 +2,10 @@ package com.ykloh.studybuddy;
 
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,13 +44,13 @@ public class ViewOwnPostFragment extends Fragment {
         endButton = (Button) thisView.findViewById(R.id.viewOwnPostEndButton);
         deleteButton = (ImageButton) thisView.findViewById(R.id.viewOwnPostDeleteButton);
 
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         String profilePictureUrl = bundle.getString("picture");
         String name = bundle.getString("name");
         String title = bundle.getString("title");
         String detail = bundle.getString("detail");
         String ownerID = bundle.getString("ownerID");
-        String postID = bundle.getString("postID");
+        final String postID = bundle.getString("postID");
 
         imageLoader = new ImageLoader(Volley.newRequestQueue(thisView.getContext()), imageCache);
         profilePicture.setImageUrl(profilePictureUrl, imageLoader);
@@ -59,8 +61,42 @@ public class ViewOwnPostFragment extends Fragment {
         ViewSubjectTagsGetter viewSubjectTagsGetter = new ViewSubjectTagsGetter();
         viewSubjectTagsGetter.load(thisView.getContext(), postID, subjectTagsTV);
 
-        //TODO delete
-        //TODO end
+        this.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(thisView.getContext());
+                EmptyBuilder.setMessage("Are you sure you want to end?")
+                        .setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DeletePost deletePost = new DeletePost();
+                                deletePost.submitDelete(thisView.getContext(), postID);
+                            }
+                        })
+                        .setPositiveButton("NO", null)
+                        .create()
+                        .show();
+
+            }
+        });
+
+        this.endButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(thisView.getContext());
+                EmptyBuilder.setMessage("Are you sure you don't need help anymore?")
+                        .setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                EndPost endPost = new EndPost();
+                                endPost.confirmEnd(thisView.getContext(), postID);
+                            }
+                        })
+                        .setPositiveButton("NO", null)
+                        .create()
+                        .show();
+            }
+        });
 
 
 

@@ -66,6 +66,7 @@ public class SubjectListGetter {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
+
                 if (s.equals("Request Failed.")) {
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                     EmptyBuilder.setMessage(s)
@@ -74,8 +75,10 @@ public class SubjectListGetter {
                             .show();
 
                 } else {
-
+                    android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
+                    fragmentManager.popBackStack();
                     Intent myIntent = new Intent(context, SelectSubjectTagsActivity.class);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     myIntent.putExtra("subjectList", s);
                     context.startActivity(myIntent);
 

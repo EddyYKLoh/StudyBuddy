@@ -1,6 +1,8 @@
 package com.ykloh.studybuddy;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,52 +20,39 @@ import java.util.List;
 
 public class RequestFragment extends Fragment {
 
-    List<PublicPost> list = new ArrayList<PublicPost>();
 
     View thisView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         thisView = inflater.inflate(R.layout.request_fragment, container, false);
-        getActivity().setTitle("Requests");
+        getActivity().setTitle("Request");
 
-        String postString = "";
+        SharedPreferences sharedPreferences = thisView.getContext().getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        String userID = sharedPreferences.getString("userID", null);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            postString = bundle.getString("RequestList");
-        }
-
-
-        if (postString.equals("")) {
-
-        } else {
-            String[] individualPost = postString.split(System.getProperty("line.separator"));
-
-            for (int i = 0; i < individualPost.length; i++) {
-                String[] postElements = individualPost[i].split("<SEPARATE>");
-                list.add(new PublicPost(postElements[0], postElements[1], postElements[2], postElements[3], postElements[4], postElements[5]));
-            }
-
-            final RequestAdapter adapter = new RequestAdapter(getActivity(), list);
-            ListView listView = (ListView) thisView.findViewById(R.id.requestListView);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    PublicPost publicPost = (PublicPost) parent.getItemAtPosition(position);
-                    UIPickerHelperFilter UIPickerHelperFilter = new UIPickerHelperFilter();
-                    UIPickerHelperFilter.processUISelection(thisView.getContext(), publicPost);
+        ListView listView = (ListView) thisView.findViewById(R.id.requestListView);
+        RequestGetter requestGetter = new RequestGetter();
+        requestGetter.RequestLoader(thisView.getContext(), userID, listView);
 
 
-                }
-            });
-        }
+
 
         return thisView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = thisView.getContext().getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        String userID = sharedPreferences.getString("userID", null);
+        ListView listView = (ListView) thisView.findViewById(R.id.requestListView);
+        RequestGetter requestGetter = new RequestGetter();
+        requestGetter.RequestLoader(thisView.getContext(), userID, listView);
 
+    }
 
 }

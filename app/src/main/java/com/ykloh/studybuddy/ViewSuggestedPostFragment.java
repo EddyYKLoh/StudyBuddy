@@ -1,8 +1,10 @@
 package com.ykloh.studybuddy;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +63,33 @@ public class ViewSuggestedPostFragment extends Fragment {
         ViewSubjectTagsGetter viewSubjectTagsGetter = new ViewSubjectTagsGetter();
         viewSubjectTagsGetter.load(thisView.getContext(), postID, subjectTagsTV);
 
-        //TODO accept
-        //TODO dismiss
+        this.acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AcceptSuggestion acceptSuggestion = new AcceptSuggestion();
+                acceptSuggestion.submitHelp(thisView.getContext(), postID, bundle);
+
+            }
+        });
+
+        this.dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(thisView.getContext());
+                EmptyBuilder.setMessage("Are you sure you don't want to help?")
+                        .setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                DismissSuggestion dismissSuggestion = new DismissSuggestion();
+                                dismissSuggestion.submitDismiss(thisView.getContext(), postID, bundle);
+                            }
+                        })
+                        .setPositiveButton("NO", null)
+                        .create()
+                        .show();
+
+            }
+        });
 
 
 

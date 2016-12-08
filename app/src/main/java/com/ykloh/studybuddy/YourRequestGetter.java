@@ -1,14 +1,11 @@
 package com.ykloh.studybuddy;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,20 +16,22 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by LYK on 10/12/2016.
+ * Created by LYK on 12/8/2016.
  */
-public class SubjectTagAdder {
+public class YourRequestGetter {
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/addSubjectTag.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/yourRequestGetter.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -40,7 +39,7 @@ public class SubjectTagAdder {
 
             OutputStream outputStream = connection.getOutputStream();
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            bufferedWriter.write(this.getPostDataString(postDataParams));
+            bufferedWriter.write(getPostDataString(postDataParams));
             bufferedWriter.flush();
             bufferedWriter.close();
             outputStream.close();
@@ -48,13 +47,23 @@ public class SubjectTagAdder {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                response = bufferedReader.readLine();
+                String line = null;
+                StringBuffer buffer = new StringBuffer();
+                while ((line = bufferedReader.readLine()) != null) {
+                    buffer.append(line + '\n');
+                }
+
+                response = buffer.toString();
+
+
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
             response = "Couldn't connect to server.";
         }
+
         return response;
     }
 
@@ -75,44 +84,53 @@ public class SubjectTagAdder {
         return dataString.toString();
     }
 
-    public void AddSubjectTag(final Context context, final String subjectTags) {
+    public void yourRequestLoader(final Context context, String userID, final ListView listView) {
 
-        class SubmitSubjectTag extends AsyncTask<String, Void, String> {
-
-            ProgressDialog loading;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                loading = ProgressDialog.show(context, "Loading...", null, true, true);
-            }
+        class Loader extends AsyncTask<String, Void, String> {
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                loading.dismiss();
+                if (s.equals("Couldn't connect to server.")) {
 
-                if (s.equals("Database query error.")
-                        || s.equals("Post do not exist. Please post again.")
-                        || s.equals("Couldn't connect to server.")
-                        || s.equals("Error searching for subject in the database.")) {
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                     EmptyBuilder.setMessage(s)
-                            .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                    context.startActivity(new Intent(context, MainActivity.class));
-                                }
-                            })
+                            .setNegativeButton("OK", null)
                             .create()
                             .show();
 
+                } else {
 
-                } else if (s.equals("Successfully posted.")) {
 
-                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-//                    context.startActivity(new Intent(context, MainActivity.class));
+                    List<PublicPost> list = new ArrayList<PublicPost>();
+                    String postString = s;
+
+
+                    if (postString.equals("")) {
+
+                    } else {
+                        String[] individualPost = postString.split(System.getProperty("line.separator"));
+
+                        for (int i = 0; i < individualPost.length; i++) {
+                            String[] postElements = individualPost[i].split("<SEPARATE>");
+                            list.add(new PublicPost(postElements[0], postElements[1], postElements[2], postElements[3], postElements[4], postElements[5]));
+                        }
+
+                        RequestAdapter adapter = new RequestAdapter(context, list);
+
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                PublicPost publicPost = (PublicPost) parent.getItemAtPosition(position);
+                                UIPickerHelperFilter UIPickerHelperFilter = new UIPickerHelperFilter();
+                                UIPickerHelperFilter.processUISelection(context, publicPost);
+
+
+                            }
+                        });
+                    }
+
 
                 }
 
@@ -121,20 +139,16 @@ public class SubjectTagAdder {
             @Override
             protected String doInBackground(String... params) {
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("publicPostID", params[0]);
-                data.put("subjects", params[1]);
+                data.put("userID", params[0]);
 
                 String result = sendPostRequest(data);
 
                 return result;
             }
-
         }
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("PublicPostUtil", Context.MODE_PRIVATE);
-        String postID = sharedPreferences.getString("publicPostID", null);
-        SubmitSubjectTag sst = new SubmitSubjectTag();
-        sst.execute(postID, subjectTags);
+        Loader lo = new Loader();
+        lo.execute(userID);
 
     }
 }

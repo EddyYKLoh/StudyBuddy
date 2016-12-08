@@ -95,7 +95,7 @@ public class OfferHelp {
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                if(s.equals("Couldn't connect to server.")||s.equals("Query failed.")||s.equals("You have completed helping this before.")){
+                if(s.equals("Couldn't connect to server.")||s.equals("Query failed.")||s.equals("Spam detected.")){
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                     EmptyBuilder.setMessage(s)
                             .setNegativeButton("OK", null)

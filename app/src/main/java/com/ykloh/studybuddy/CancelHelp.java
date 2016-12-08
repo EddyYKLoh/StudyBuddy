@@ -1,12 +1,10 @@
 package com.ykloh.studybuddy;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
@@ -25,14 +23,14 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by LYK on 10/12/2016.
+ * Created by LYK on 12/8/2016.
  */
-public class SubjectTagAdder {
+public class CancelHelp {
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/addSubjectTag.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/cancelHelp.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -40,7 +38,7 @@ public class SubjectTagAdder {
 
             OutputStream outputStream = connection.getOutputStream();
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-            bufferedWriter.write(this.getPostDataString(postDataParams));
+            bufferedWriter.write(getPostDataString(postDataParams));
             bufferedWriter.flush();
             bufferedWriter.close();
             outputStream.close();
@@ -48,16 +46,31 @@ public class SubjectTagAdder {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpsURLConnection.HTTP_OK) {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                response = bufferedReader.readLine();
+                String line = null;
+                StringBuffer buffer = new StringBuffer();
+                while ((line = bufferedReader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+                response = buffer.toString();
+
             }
 
-        } catch (Exception e) {
+
+        } catch (
+                Exception e
+                )
+
+        {
             e.printStackTrace();
             response = "Couldn't connect to server.";
         }
+
         return response;
     }
-
+    //TODO Simple notification
+    //TODO rating
+    //TODO profile
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder dataString = new StringBuilder();
         boolean first = true;
@@ -75,54 +88,41 @@ public class SubjectTagAdder {
         return dataString.toString();
     }
 
-    public void AddSubjectTag(final Context context, final String subjectTags) {
+    public void submitCancelHelp(final Context context, final String postID, final Bundle bundle) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+        final String userID = sharedPreferences.getString("userID", null);
 
-        class SubmitSubjectTag extends AsyncTask<String, Void, String> {
-
-            ProgressDialog loading;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                loading = ProgressDialog.show(context, "Loading...", null, true, true);
-            }
+        class cancelHelp extends AsyncTask<String, Void, String> {
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                loading.dismiss();
-
-                if (s.equals("Database query error.")
-                        || s.equals("Post do not exist. Please post again.")
-                        || s.equals("Couldn't connect to server.")
-                        || s.equals("Error searching for subject in the database.")) {
+                if(s.equals("Couldn't connect to server.")||s.equals("Query failed.")){
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                     EmptyBuilder.setMessage(s)
-                            .setCancelable(false)
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                    context.startActivity(new Intent(context, MainActivity.class));
-                                }
-                            })
+                            .setNegativeButton("OK", null)
                             .create()
                             .show();
-
-
-                } else if (s.equals("Successfully posted.")) {
-
+                }else{
                     Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-//                    context.startActivity(new Intent(context, MainActivity.class));
-
+                    ViewPublicPostFragment viewPublicPostFragment = new ViewPublicPostFragment();
+                    android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
+                    viewPublicPostFragment.setArguments(bundle);
+                    fragmentManager.popBackStack();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.mainContentFrame, viewPublicPostFragment )
+                            .addToBackStack(null)
+                            .commit();
                 }
+
 
             }
 
             @Override
             protected String doInBackground(String... params) {
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("publicPostID", params[0]);
-                data.put("subjects", params[1]);
+                data.put("postID", params[0]);
+                data.put("helperID", params[1]);
 
                 String result = sendPostRequest(data);
 
@@ -131,10 +131,10 @@ public class SubjectTagAdder {
 
         }
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences("PublicPostUtil", Context.MODE_PRIVATE);
-        String postID = sharedPreferences.getString("publicPostID", null);
-        SubmitSubjectTag sst = new SubmitSubjectTag();
-        sst.execute(postID, subjectTags);
+        cancelHelp ch = new cancelHelp();
+        ch.execute(postID, userID);
 
     }
 }
+
+

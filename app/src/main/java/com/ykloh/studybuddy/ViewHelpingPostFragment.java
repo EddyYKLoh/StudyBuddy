@@ -1,8 +1,10 @@
 package com.ykloh.studybuddy;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +72,26 @@ public class ViewHelpingPostFragment extends Fragment {
             }
         });
 
-        //TODO cancel
+        this.cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(thisView.getContext());
+                EmptyBuilder.setMessage("Are you sure you want to cancel?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                CancelHelp cancelHelp = new CancelHelp();
+                                cancelHelp.submitCancelHelp(thisView.getContext(), postID, bundle);
+                            }
+                        })
+                        .setNegativeButton("NO", null)
+                        .create()
+                        .show();
+
+
+            }
+        });
+
 
         return thisView;
     }

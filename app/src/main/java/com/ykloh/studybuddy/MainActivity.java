@@ -61,8 +61,14 @@ public class MainActivity extends AppCompatActivity
         final String email = sharedPreferences.getString("emailAddress", null);
         emailOnNavigationTextView.setText(email);
 
-        AllPublicPostGetter publicPostGetter = new AllPublicPostGetter();
-        publicPostGetter.PublicPostLoader(MainActivity.this);
+        HomeFragment homeFragment = new HomeFragment();
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainContentFrame, homeFragment )
+                .addToBackStack(null)
+                .commit();
+
+
 
 
     }
@@ -124,17 +130,24 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.navHome) {
             // Handle the action
-            AllPublicPostGetter publicPostGetter = new AllPublicPostGetter();
-            publicPostGetter.PublicPostLoader(MainActivity.this);
+            HomeFragment homeFragment = new HomeFragment();
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContentFrame, homeFragment )
+                    .addToBackStack(null)
+                    .commit();
         }
 //        else if (id == R.id.navNotification) {
 //
 //        }
         else if (id == R.id.navRequest) {
-            SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
-            String userID = sharedPreferences.getString("userID", null);
-            RequestGetter requestGetter = new RequestGetter();
-            requestGetter.RequestLoader(MainActivity.this, userID);
+
+            RequestFragment requestFragment = new RequestFragment();
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContentFrame, requestFragment )
+                    .addToBackStack(null)
+                    .commit();
 
 
         }
@@ -146,7 +159,12 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.navProfile) {
 
         } else if (id == R.id.navOwnRequest) {
-
+            YourRequestFragment yourRequestFragment = new YourRequestFragment();
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContentFrame, yourRequestFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

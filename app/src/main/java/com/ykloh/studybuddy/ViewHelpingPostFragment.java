@@ -51,7 +51,7 @@ public class ViewHelpingPostFragment extends Fragment {
         String name = bundle.getString("name");
         String title = bundle.getString("title");
         String detail = bundle.getString("detail");
-        String ownerID = bundle.getString("ownerID");
+        final String ownerID = bundle.getString("ownerID");
         final String postID = bundle.getString("postID");
 
         imageLoader = new ImageLoader(Volley.newRequestQueue(thisView.getContext()), imageCache);
@@ -89,6 +89,21 @@ public class ViewHelpingPostFragment extends Fragment {
                         .show();
 
 
+            }
+        });
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("userID", ownerID);
+                ProfileFragment profileFragment = new ProfileFragment();
+                android.app.FragmentManager fragmentManager = getFragmentManager();
+                profileFragment.setArguments(bundle);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.mainContentFrame, profileFragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

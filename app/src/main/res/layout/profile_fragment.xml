@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/profileProfPicNIV"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_margin="16dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_droid" />
+
+    <TextView
+        android:id="@+id/profileNameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:layout_margin="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/profileProfPicNIV"
+        android:textColor="#000000"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
+    <RatingBar
+        android:id="@+id/profileRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/profileNameTV"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/profileContactDetailHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact detail:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_margin="16dp"
+        android:layout_below="@id/profileRatingBar"/>
+
+    <TextView
+        android:id="@+id/profileEmailTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_below="@id/profileContactDetailHeader"/>
+
+
+</RelativeLayout>

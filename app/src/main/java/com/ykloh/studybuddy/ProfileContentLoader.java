@@ -1,13 +1,16 @@
 package com.ykloh.studybuddy;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,9 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -28,13 +29,13 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by LYK on 12/9/2016.
  */
-public class NotificationGetter {
+public class ProfileContentLoader {
 
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/notificationGetter.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/loadProfileContent.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -53,23 +54,25 @@ public class NotificationGetter {
                 String line = null;
                 StringBuffer buffer = new StringBuffer();
                 while ((line = bufferedReader.readLine()) != null) {
-                    buffer.append(line + '\n');
+                    buffer.append(line);
                 }
 
                 response = buffer.toString();
 
-
             }
 
 
-        } catch (Exception e) {
+        } catch (
+                Exception e
+                )
+
+        {
             e.printStackTrace();
             response = "Couldn't connect to server.";
         }
 
         return response;
     }
-
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder dataString = new StringBuilder();
         boolean first = true;
@@ -87,61 +90,33 @@ public class NotificationGetter {
         return dataString.toString();
     }
 
-    public void notificationLoader(final Context context, String userID, final ListView listView) {
-
-        class Loader extends AsyncTask<String, Void, String> {
+    public void loadContent(final Context context, final String targetUserID, final NetworkImageView profileProfPicNIV, final TextView profileNameTV, final RatingBar profileRatingBar, final TextView profileEmailTV) {
+        class end extends AsyncTask<String, Void, String> {
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                if (s.equals("Couldn't connect to server.")) {
-
+                if(s.equals("Couldn't connect to server.")){
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                     EmptyBuilder.setMessage(s)
                             .setNegativeButton("OK", null)
                             .create()
                             .show();
-
-                } else {
-
-
-                    List<Notification> list = new ArrayList<Notification>();
-                    String postString = s;
-
-
-                    if (postString.equals("")) {
-
-                    } else {
-                        String[] individualPost = postString.split(System.getProperty("line.separator"));
-
-                        for (int i = 0; i < individualPost.length; i++) {
-                            String[] postElements = individualPost[i].split("<SEPARATE>");
-                            list.add(new Notification(postElements[0], postElements[1], postElements[2]));
-                        }
-
-                        NotificationAdapter adapter = new NotificationAdapter(context, list);
-
-                        listView.setAdapter(adapter);
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Notification notification = (Notification) parent.getItemAtPosition(position);
-                                Bundle bundle = new Bundle();
-                                bundle.putString("userID", notification.getFromUser());
-                                ProfileFragment profileFragment = new ProfileFragment();
-                                android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-                                profileFragment.setArguments(bundle);
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.mainContentFrame, profileFragment)
-                                        .addToBackStack(null)
-                                        .commit();
-                            }
-                        });
-
-                    }
-
+                }else{
+                    String [] components = s.split("<SEPARATE>");
+                    String name = components[0];
+                    String profPicURL = components[1];
+                    String email = components[2];
+                    float rating = Float.parseFloat(components[3]);
+                    ImageLoader.ImageCache imageCache = new BitmapLruCache();
+                    ImageLoader imageLoader = new ImageLoader(Volley.newRequestQueue(context), imageCache);
+                    profileProfPicNIV.setImageUrl(profPicURL, imageLoader);
+                    profileNameTV.setText(name);
+                    profileRatingBar.setRating(rating);
+                    profileEmailTV.setText(email);
 
                 }
+
 
             }
 
@@ -154,10 +129,13 @@ public class NotificationGetter {
 
                 return result;
             }
+
         }
 
-        Loader lo = new Loader();
-        lo.execute(userID);
+        end e = new end();
+        e.execute(targetUserID);
 
     }
 }
+
+

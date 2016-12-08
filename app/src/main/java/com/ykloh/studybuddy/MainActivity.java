@@ -1,6 +1,7 @@
 package com.ykloh.studybuddy;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity
             // Handle the action
             SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
             String userID = sharedPreferences.getString("userID", null);
+
             CheckUnratedHelp checkUnratedHelp = new CheckUnratedHelp();
             checkUnratedHelp.checkUser(this, userID);
 
@@ -165,6 +167,17 @@ public class MainActivity extends AppCompatActivity
 //
 //        }
         else if (id == R.id.navProfile) {
+            SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+            String userID = sharedPreferences.getString("userID", null);
+            Bundle bundle = new Bundle();
+            bundle.putString("userID", userID);
+            ProfileFragment profileFragment = new ProfileFragment();
+            android.app.FragmentManager fragmentManager = getFragmentManager();
+            profileFragment.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.mainContentFrame, profileFragment)
+                    .addToBackStack(null)
+                    .commit();
 
         } else if (id == R.id.navOwnRequest) {
             YourRequestFragment yourRequestFragment = new YourRequestFragment();

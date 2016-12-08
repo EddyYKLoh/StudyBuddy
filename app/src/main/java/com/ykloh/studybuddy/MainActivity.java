@@ -61,12 +61,16 @@ public class MainActivity extends AppCompatActivity
         final String email = sharedPreferences.getString("emailAddress", null);
         emailOnNavigationTextView.setText(email);
 
-        HomeFragment homeFragment = new HomeFragment();
-        android.app.FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.mainContentFrame, homeFragment )
-                .addToBackStack(null)
-                .commit();
+        String userID = sharedPreferences.getString("userID", null);
+        CheckUnratedHelp checkUnratedHelp = new CheckUnratedHelp();
+        checkUnratedHelp.checkUser(this, userID);
+
+//        HomeFragment homeFragment = new HomeFragment();
+//        android.app.FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.mainContentFrame, homeFragment )
+//                .addToBackStack(null)
+//                .commit();
 
 
 
@@ -130,16 +134,20 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.navHome) {
             // Handle the action
-            HomeFragment homeFragment = new HomeFragment();
+            SharedPreferences sharedPreferences = getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+            String userID = sharedPreferences.getString("userID", null);
+            CheckUnratedHelp checkUnratedHelp = new CheckUnratedHelp();
+            checkUnratedHelp.checkUser(this, userID);
+
+        }
+        else if (id == R.id.navNotification) {
+            NotificationFragment notificationFragment = new NotificationFragment();
             android.app.FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.mainContentFrame, homeFragment )
+                    .replace(R.id.mainContentFrame, notificationFragment)
                     .addToBackStack(null)
                     .commit();
         }
-//        else if (id == R.id.navNotification) {
-//
-//        }
         else if (id == R.id.navRequest) {
 
             RequestFragment requestFragment = new RequestFragment();

@@ -2,7 +2,9 @@ package com.ykloh.studybuddy;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -26,7 +28,6 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         thisView = inflater.inflate(R.layout.home_fragment, container, false);
         getActivity().setTitle("Home");
         FloatingActionButton fab = (FloatingActionButton) thisView.findViewById(R.id.fab);

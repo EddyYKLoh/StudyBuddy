@@ -68,8 +68,7 @@ public class CancelHelp {
 
         return response;
     }
-    //TODO Simple notification
-    //TODO rating
+
     //TODO profile
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder dataString = new StringBuilder();
@@ -123,6 +122,8 @@ public class CancelHelp {
                 HashMap<String, String> data = new HashMap<String, String>();
                 data.put("postID", params[0]);
                 data.put("helperID", params[1]);
+                data.put("ownerID", params[2]);
+                data.put("title", params[3]);
 
                 String result = sendPostRequest(data);
 
@@ -132,7 +133,7 @@ public class CancelHelp {
         }
 
         cancelHelp ch = new cancelHelp();
-        ch.execute(postID, userID);
+        ch.execute(postID, userID, bundle.getString("ownerID"), bundle.getString("title"));
 
     }
 }

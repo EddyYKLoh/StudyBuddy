@@ -77,14 +77,14 @@ public class ViewHelpingPostFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(thisView.getContext());
                 EmptyBuilder.setMessage("Are you sure you want to cancel?")
-                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("YES", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 CancelHelp cancelHelp = new CancelHelp();
                                 cancelHelp.submitCancelHelp(thisView.getContext(), postID, bundle);
                             }
                         })
-                        .setNegativeButton("NO", null)
+                        .setPositiveButton("NO", null)
                         .create()
                         .show();
 

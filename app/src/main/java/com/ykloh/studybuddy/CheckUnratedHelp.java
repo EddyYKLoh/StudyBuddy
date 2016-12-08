@@ -1,12 +1,12 @@
 package com.ykloh.studybuddy;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,14 +23,14 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by LYK on 12/7/2016.
+ * Created by LYK on 12/8/2016.
  */
-public class OfferHelp {
+public class CheckUnratedHelp {
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/offerHelp.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/checkUnratedHelp.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -48,8 +48,12 @@ public class OfferHelp {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = null;
                 StringBuffer buffer = new StringBuffer();
+                boolean first = true;
                 while ((line = bufferedReader.readLine()) != null) {
-                    buffer.append(line);
+                    if(first)
+                        buffer.append(line);
+                    else
+                        buffer.append('\n'+line);
                 }
 
                 response = buffer.toString();
@@ -86,42 +90,64 @@ public class OfferHelp {
         return dataString.toString();
     }
 
-    public void submitHelp(final Context context, final String postID, final Bundle bundle) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
-        final String userID = sharedPreferences.getString("userID", null);
+    public void checkUser(final Context context, String userID) {
 
-        class help extends AsyncTask<String, Void, String> {
+        class checkUnrated extends AsyncTask<String, Void, String> {
 
             @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                if(s.equals("Couldn't connect to server.")||s.equals("Query failed.")||s.equals("Spam detected.")){
-                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
-                    EmptyBuilder.setMessage(s)
-                            .setNegativeButton("OK", null)
-                            .create()
-                            .show();
-                }else{
-                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                    ViewHelpingPostFragment viewHelpingPostFragment = new ViewHelpingPostFragment();
-                    android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-                    viewHelpingPostFragment.setArguments(bundle);
-                    fragmentManager.popBackStack();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.mainContentFrame, viewHelpingPostFragment )
-                            .addToBackStack(null)
-                            .commit();
-                }
+            protected void onPreExecute() {
+                super.onPreExecute();
 
             }
 
             @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                if (s.equals("Couldn't connect to server.")) {
+                    AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
+                    EmptyBuilder.setMessage("Couldn't connect to server.")
+                            .setNegativeButton("OK", null)
+                            .create()
+                            .show();
+
+                } else {
+                    if(s.contains("<SEPARATE>")){
+                        String[] individualHelp = s.split("<>");
+                        String[] components = individualHelp[0].split("<SEPARATE>");
+                        String helperID = components[0];
+                        String helperName = components [1];
+                        String postID = components[2];
+                        String publicPostTitle = components[3];
+                        String status = components[4];
+
+                        Intent myIntent = new Intent(context, RatingActivity.class);
+                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        myIntent.putExtra("helperID",helperID);
+                        myIntent.putExtra("helperName",helperName);
+                        myIntent.putExtra("postID",postID);
+                        myIntent.putExtra("publicPostTitle",publicPostTitle);
+                        myIntent.putExtra("status",status);
+                        context.startActivity(myIntent);
+
+                    }else if(s.equals("Clear.")){
+                        HomeFragment homeFragment = new HomeFragment();
+                        android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.mainContentFrame, homeFragment )
+                                .addToBackStack(null)
+                                .commit();
+                    }
+
+
+                }
+            }
+
+
+            @Override
             protected String doInBackground(String... params) {
                 HashMap<String, String> data = new HashMap<String, String>();
-                data.put("postID", params[0]);
-                data.put("helperID", params[1]);
-                data.put("ownerID", params[2]);
-                data.put("title", params[3]);
+                data.put("userID", params[0]);
+
 
                 String result = sendPostRequest(data);
 
@@ -130,10 +156,8 @@ public class OfferHelp {
 
         }
 
-        help he = new help();
-        he.execute(postID, userID, bundle.getString("ownerID"), bundle.getString("title"));
+        checkUnrated cu = new checkUnrated();
+        cu.execute(userID);
 
     }
 }
-
-

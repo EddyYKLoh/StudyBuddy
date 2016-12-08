@@ -2,9 +2,8 @@ package com.ykloh.studybuddy;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
@@ -23,14 +22,14 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by LYK on 12/7/2016.
+ * Created by LYK on 12/8/2016.
  */
-public class OfferHelp {
+public class UpdateHelpStatus {
     private String sendPostRequest(HashMap<String, String> postDataParams) {
         URL url = null;
         String response = "";
         try {
-            url = new URL("http://192.168.43.103/StudyBuddy/offerHelp.php");
+            url = new URL("http://192.168.43.103/StudyBuddy/updateHelpStatus.php");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
@@ -68,7 +67,6 @@ public class OfferHelp {
 
         return response;
     }
-
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder dataString = new StringBuilder();
         boolean first = true;
@@ -86,32 +84,22 @@ public class OfferHelp {
         return dataString.toString();
     }
 
-    public void submitHelp(final Context context, final String postID, final Bundle bundle) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
-        final String userID = sharedPreferences.getString("userID", null);
-
-        class help extends AsyncTask<String, Void, String> {
+    public void submitUpdate(final Context context, final String helperID, final String postID) {
+        class end extends AsyncTask<String, Void, String> {
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                if(s.equals("Couldn't connect to server.")||s.equals("Query failed.")||s.equals("Spam detected.")){
+                if(s.equals("Couldn't connect to server.")||s.equals("Query failed.")){
                     AlertDialog.Builder EmptyBuilder = new AlertDialog.Builder(context);
                     EmptyBuilder.setMessage(s)
                             .setNegativeButton("OK", null)
                             .create()
                             .show();
                 }else{
-                    Toast.makeText(context, s, Toast.LENGTH_LONG).show();
-                    ViewHelpingPostFragment viewHelpingPostFragment = new ViewHelpingPostFragment();
-                    android.app.FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-                    viewHelpingPostFragment.setArguments(bundle);
-                    fragmentManager.popBackStack();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.mainContentFrame, viewHelpingPostFragment )
-                            .addToBackStack(null)
-                            .commit();
+                    context.startActivity(new Intent(context, MainActivity.class));
                 }
+
 
             }
 
@@ -120,8 +108,6 @@ public class OfferHelp {
                 HashMap<String, String> data = new HashMap<String, String>();
                 data.put("postID", params[0]);
                 data.put("helperID", params[1]);
-                data.put("ownerID", params[2]);
-                data.put("title", params[3]);
 
                 String result = sendPostRequest(data);
 
@@ -130,8 +116,8 @@ public class OfferHelp {
 
         }
 
-        help he = new help();
-        he.execute(postID, userID, bundle.getString("ownerID"), bundle.getString("title"));
+        end e = new end();
+        e.execute(postID, helperID);
 
     }
 }

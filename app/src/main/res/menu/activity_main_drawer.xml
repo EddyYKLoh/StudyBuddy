@@ -12,6 +12,11 @@
             android:icon="@drawable/ic_live_help"
             android:title="Request" />
 
+        <item
+            android:id="@+id/navNotification"
+            android:icon="@drawable/ic_notification"
+            android:title="Notification" />
+
 
     </group>
 
@@ -30,10 +35,7 @@
 
 </menu>
 
-<!--<item-->
-<!--android:id="@+id/navNotification"-->
-<!--android:icon="@drawable/ic_notification"-->
-<!--android:title="Notification" />-->
+
 
 <!--<item-->
 <!--android:id="@+id/navMessage"-->
